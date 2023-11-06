@@ -4,7 +4,7 @@ import { Chess } from "chess.js";
 export default function useGame() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [puzzle, setPuzzle] = useState<any>(null);
-  const [initialPosition, setInitialPosition] = useState<string>("start");
+  const [initialPosition, setInitialPosition] = useState<string | null>(null);
   const [currentGuessMoves, setCurrentGuessMoves] = useState<string[]>([]);
   const [numberOfSubmissionsLeft, setNumberOfSubmissionsLeft] =
     useState<number>(6);
