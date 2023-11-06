@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { Chess } from "chess.js";
 
 export default function useGame() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [puzzle, setPuzzle] = useState<any>(null);
+  const [initialPosition, setInitialPosition] = useState<string>("start");
   const [currentGuessMoves, setCurrentGuessMoves] = useState<string[]>([]);
   const [numberOfSubmissionsLeft, setNumberOfSubmissionsLeft] =
     useState<number>(6);
@@ -14,6 +16,10 @@ export default function useGame() {
       const response = await fetch(url);
       const puzzle = await response.json();
       setPuzzle(puzzle);
+
+      const chess = new Chess();
+      chess.loadPgn(puzzle.game.pgn);
+      setInitialPosition(chess.fen());
     }
 
     fetchPuzzle();
@@ -27,10 +33,6 @@ export default function useGame() {
     setCurrentGuessMoves(
       currentGuessMoves.slice(0, currentGuessMoves.length - 1)
     );
-  };
-
-  const getInitialPosition = () => {
-    return puzzle?.pgn;
   };
 
   const getSolution = () => {
@@ -69,9 +71,9 @@ export default function useGame() {
   };
 
   return {
-    isSolved,
+    initialPosition,
     numberOfSubmissionsLeft,
-    getInitialPosition,
+    isSolved,
     getSolution,
     makeGuessMove,
     removeLastGuessMove,
