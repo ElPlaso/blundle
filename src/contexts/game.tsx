@@ -27,7 +27,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [puzzle, setPuzzle] = useState<any>(null);
-  const [currentGuessMoves, setCurrentGuessMoves] = useState<string[]>([]);
+  const [currentGuessMoves, setCurrentGuessMoves] = useState<string[]>(
+    Array.from({ length: NUM_MOVES_PER_GUESS }, () => "")
+  );
   const [numberOfSubmissionsLeft, setNumberOfSubmissionsLeft] =
     useState<number>(MAX_GUESSES);
   const [isSolved, setIsSolved] = useState<boolean>(false);
@@ -41,7 +43,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }
 
   function onDrop(sourceSquare: string, targetSquare: string) {
-    if (currentGuessMoves.length === NUM_MOVES_PER_GUESS) return false;
+    if (currentGuessMoves.findIndex((move) => move === "") === -1) return false;
 
     const move = makeAMove({
       from: sourceSquare,
@@ -72,7 +74,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const makeGuessMove = (guessMove: string) => {
-    setCurrentGuessMoves([...currentGuessMoves, guessMove]);
+    const currentGuessMovesCopy = [...currentGuessMoves];
+    const emptyIndex = currentGuessMovesCopy.findIndex((move) => move === "");
+    if (emptyIndex === -1) return;
+    currentGuessMovesCopy[emptyIndex] = guessMove;
+    setCurrentGuessMoves(currentGuessMovesCopy);
   };
 
   const removeLastGuessMove = () => {

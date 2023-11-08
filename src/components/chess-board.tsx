@@ -6,7 +6,5 @@ export default function ChessBoard() {
 
   if (!game) return <div>Loading...</div>;
 
-  return (
-    <Chessboard position={game.fen()} onPieceDrop={onDrop} boardWidth={500} />
-  );
+  return <Chessboard position={game.fen()} onPieceDrop={onDrop} />;
 }

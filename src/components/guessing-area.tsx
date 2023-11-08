@@ -7,13 +7,24 @@ export default function GuessingArea() {
     <div style={{ display: "flex" }}>
       {currentGuessMoves.map((move, index) => (
         <div
+          className="move-tile"
+          key={index}
           style={{
-            border: "2px",
-            padding: "25px",
-            backgroundColor: "lightGray",
+            border: "solid",
+            height: "80px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            backgroundColor: move !== "" ? "#213547" : "",
+            color: move !== "" ? "white" : "",
+            fontWeight: "bold",
+            borderRadius: "5px",
+            transition: "background-color 0.5s",
+            marginRight: index != currentGuessMoves.length - 1 ? "10px" : "0px",
           }}
         >
-          <span key={index}>{move} </span>
+          {move}
         </div>
       ))}
     </div>

@@ -7,8 +7,18 @@ function App() {
   return (
     <GameProvider>
       <h1>ChessPuzzle</h1>
-      <ChessBoard />
-      <GuessingArea />
+      <div style={{ width: "540px", margin: "auto" }}>
+        <div
+          style={{
+            width: "100%",
+            height: "540px",
+            marginBottom: "25px",
+          }}
+        >
+          <ChessBoard />
+        </div>
+        <GuessingArea />
+      </div>
     </GameProvider>
   );
 }
