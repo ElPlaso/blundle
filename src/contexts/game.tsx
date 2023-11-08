@@ -1,7 +1,26 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { Chess } from "chess.js";
 
-export default function useGame() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const GameContext = createContext<GameContextType>(null as any);
+
+interface GameContextType {
+  game: Chess | null;
+  numberOfSubmissionsLeft: number;
+  isSolved: boolean;
+  getSolution: () => string | undefined;
+  makeGuessMove: (guessMove: string) => void;
+  removeLastGuessMove: () => void;
+  submitGuess: () => { correctMoves: number[]; incorrectMoves: number[] };
+  onDrop: (sourceSquare: string, targetSquare: string) => boolean;
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+export function useGameContext() {
+  return useContext(GameContext);
+}
+
+export function GameProvider({ children }: { children: React.ReactNode }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [puzzle, setPuzzle] = useState<any>(null);
   const [currentGuessMoves, setCurrentGuessMoves] = useState<string[]>([]);
@@ -90,7 +109,7 @@ export default function useGame() {
     return { correctMoves, incorrectMoves };
   };
 
-  return {
+  const value = {
     game,
     numberOfSubmissionsLeft,
     isSolved,
@@ -100,4 +119,6 @@ export default function useGame() {
     submitGuess,
     onDrop,
   };
+
+  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }
