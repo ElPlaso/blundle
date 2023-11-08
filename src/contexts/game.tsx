@@ -8,6 +8,7 @@ interface GameContextType {
   game: Chess | null;
   numberOfSubmissionsLeft: number;
   isSolved: boolean;
+  currentGuessMoves: string[];
   getSolution: () => string | undefined;
   makeGuessMove: (guessMove: string) => void;
   removeLastGuessMove: () => void;
@@ -21,11 +22,14 @@ export function useGameContext() {
 }
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
+  const MAX_GUESSES = 6;
+  const NUM_MOVES_PER_GUESS = 6;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [puzzle, setPuzzle] = useState<any>(null);
   const [currentGuessMoves, setCurrentGuessMoves] = useState<string[]>([]);
   const [numberOfSubmissionsLeft, setNumberOfSubmissionsLeft] =
-    useState<number>(6);
+    useState<number>(MAX_GUESSES);
   const [isSolved, setIsSolved] = useState<boolean>(false);
 
   const [game, setGame] = useState<Chess | null>(null);
@@ -37,6 +41,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }
 
   function onDrop(sourceSquare: string, targetSquare: string) {
+    if (currentGuessMoves.length === NUM_MOVES_PER_GUESS) return false;
+
     const move = makeAMove({
       from: sourceSquare,
       to: targetSquare,
@@ -44,6 +50,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     });
 
     if (move === null) return false;
+    makeGuessMove(move.san);
     return true;
   }
 
@@ -113,6 +120,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     game,
     numberOfSubmissionsLeft,
     isSolved,
+    currentGuessMoves,
     getSolution,
     makeGuessMove,
     removeLastGuessMove,

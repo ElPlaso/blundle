@@ -2,9 +2,7 @@ import { Chessboard } from "react-chessboard";
 import { useGameContext } from "../contexts/game";
 
 export default function ChessBoard() {
-  const gameContext = useGameContext();
-
-  const { game, onDrop } = gameContext;
+  const { game, onDrop } = useGameContext();
 
   if (!game) return <div>Loading...</div>;
 
