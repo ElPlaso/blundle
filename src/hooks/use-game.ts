@@ -4,11 +4,29 @@ import { Chess } from "chess.js";
 export default function useGame() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [puzzle, setPuzzle] = useState<any>(null);
-  const [initialPosition, setInitialPosition] = useState<string | null>(null);
   const [currentGuessMoves, setCurrentGuessMoves] = useState<string[]>([]);
   const [numberOfSubmissionsLeft, setNumberOfSubmissionsLeft] =
     useState<number>(6);
   const [isSolved, setIsSolved] = useState<boolean>(false);
+
+  const [game, setGame] = useState<Chess | null>(null);
+
+  function makeAMove(move: { from: string; to: string; promotion: string }) {
+    const result = game!.move(move);
+    setGame(new Chess(game!.fen()));
+    return result;
+  }
+
+  function onDrop(sourceSquare: string, targetSquare: string) {
+    const move = makeAMove({
+      from: sourceSquare,
+      to: targetSquare,
+      promotion: "q",
+    });
+
+    if (move === null) return false;
+    return true;
+  }
 
   useEffect(() => {
     async function fetchPuzzle() {
@@ -17,12 +35,14 @@ export default function useGame() {
       const puzzle = await response.json();
       setPuzzle(puzzle);
 
-      const chess = new Chess();
-      chess.loadPgn(puzzle.game.pgn);
-      setInitialPosition(chess.fen());
+      const game = new Chess();
+      game.loadPgn(puzzle.game.pgn);
+
+      setGame(game);
     }
 
     fetchPuzzle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const makeGuessMove = (guessMove: string) => {
@@ -71,12 +91,13 @@ export default function useGame() {
   };
 
   return {
-    initialPosition,
+    game,
     numberOfSubmissionsLeft,
     isSolved,
     getSolution,
     makeGuessMove,
     removeLastGuessMove,
     submitGuess,
+    onDrop,
   };
 }

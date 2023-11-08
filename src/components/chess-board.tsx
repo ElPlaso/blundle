@@ -1,19 +1,10 @@
 import { Chessboard } from "react-chessboard";
 import useGame from "../hooks/use-game";
-import React from "react";
 
 export default function ChessBoard() {
-  const { initialPosition: position } = useGame();
+  const { game, onDrop } = useGame();
 
-  if (!position) return <></>;
+  if (!game) return <div>Loading...</div>;
 
-  const ChessImage = React.memo(() => {
-    return <Chessboard position={position} boardWidth={500} />;
-  });
-
-  return (
-    <>
-      <ChessImage />
-    </>
-  );
+  return <Chessboard position={game.fen()} onPieceDrop={onDrop} />;
 }
