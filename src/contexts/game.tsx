@@ -9,10 +9,14 @@ interface GameContextType {
   numberOfSubmissionsLeft: number;
   isSolved: boolean;
   currentGuessMoves: string[];
-  getSolution: () => string | undefined;
+  guessResults: {
+    correctMoves: number[];
+    incorrectButIncludedMoves: number[];
+  };
+  getSolution: () => string[] | undefined;
   makeGuessMove: (guessMove: string) => void;
   removeLastGuessMove: () => void;
-  submitGuess: () => { correctMoves: number[]; incorrectMoves: number[] };
+  submitGuess: () => void;
   onDrop: (sourceSquare: string, targetSquare: string) => boolean;
 }
 
@@ -36,6 +40,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const game = useRef<Chess>(new Chess());
   const [currentPosition, setCurrentPosition] = useState<string | null>(null);
+
+  const [guessResults, setGuessResults] = useState<{
+    correctMoves: number[];
+    incorrectButIncludedMoves: number[];
+  }>({ correctMoves: [], incorrectButIncludedMoves: [] });
 
   function makeAMove(move: { from: string; to: string; promotion: string }) {
     const result = game.current.move(move);
@@ -94,39 +103,44 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     setCurrentPosition(game.current.fen());
   };
 
-  const getSolution = () => {
-    return puzzle?.solution;
+  const getSolution = (): string[] => {
+    return (puzzle.puzzle.solution as string[]).map((move: string) =>
+      // get last square of square notation move
+      move.slice(-2)
+    );
   };
 
   const submitGuess = () => {
-    const guess = currentGuessMoves.join(" ");
-    const solution = getSolution();
     setNumberOfSubmissionsLeft((previous) => previous - 1);
-    if (guess === solution) {
-      setIsSolved(true);
-    }
-    return compareGuessToSolution();
+    setGuessResults(compareGuessToSolution());
   };
 
   // return indexes of guess moves that are in the correct position
   // as well as indexes of guess moves that are in the solution but in the wrong position
+  // TODO: need to account for correct piece being moved
   const compareGuessToSolution = () => {
-    const guess = currentGuessMoves.join(" ");
     const solution = getSolution();
-    const guessMoves = guess.split(" ");
-    const solutionMoves = solution.split(" ");
+    // remove non square notation from the moves i.e moves that are not a number or a letter from a-h
+    const guessMoves = currentGuessMoves.map((move) =>
+      move.replace(/[^a-h&^0-8]/g, "")
+    );
     const correctMoves: number[] = [];
-    const incorrectMoves: number[] = [];
+    const incorrectButIncludedMoves: number[] = [];
 
     guessMoves.forEach((move, index) => {
-      if (move === solutionMoves[index]) {
+      console.log(move, solution[index]);
+      if (move.includes(solution[index])) {
         correctMoves.push(index);
-      } else if (solutionMoves.includes(move)) {
-        incorrectMoves.push(index);
+      } else if (solution.includes(move)) {
+        incorrectButIncludedMoves.push(index);
       }
     });
 
-    return { correctMoves, incorrectMoves };
+    if (correctMoves.length === NUM_MOVES_PER_GUESS) {
+      setIsSolved(true);
+    }
+
+    return { correctMoves, incorrectButIncludedMoves };
   };
 
   const value = {
@@ -134,6 +148,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     numberOfSubmissionsLeft,
     isSolved,
     currentGuessMoves,
+    guessResults,
     getSolution,
     makeGuessMove,
     removeLastGuessMove,

@@ -10,7 +10,7 @@ export default function Actions() {
   };
 
   const handleEnter = () => {
-    submitGuess();
+    console.log(submitGuess());
   };
 
   const enterDisabled = useMemo(() => {
