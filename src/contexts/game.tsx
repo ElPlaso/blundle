@@ -13,7 +13,7 @@ interface GameContextType {
     correctMoves: number[];
     incorrectButIncludedMoves: number[];
   };
-  getSolution: () => string[] | undefined;
+  getSolution: () => string[];
   makeGuessMove: (guessMove: string) => void;
   removeLastGuessMove: () => void;
   submitGuess: () => void;
@@ -30,7 +30,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const NUM_MOVES_PER_GUESS = 6;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [puzzle, setPuzzle] = useState<any>(null);
   const [currentGuessMoves, setCurrentGuessMoves] = useState<string[]>(
     Array.from({ length: NUM_MOVES_PER_GUESS }, () => "")
   );
@@ -39,6 +38,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const [isSolved, setIsSolved] = useState<boolean>(false);
 
   const game = useRef<Chess>(new Chess());
+  const solution = useRef<string[]>([]);
   const [currentPosition, setCurrentPosition] = useState<string | null>(null);
 
   const [guessResults, setGuessResults] = useState<{
@@ -71,10 +71,27 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       const url = "https://lichess.org/api/puzzle/daily";
       const response = await fetch(url);
       const puzzle = await response.json();
-      setPuzzle(puzzle);
       const loadedGame = new Chess();
       loadedGame.loadPgn(puzzle.game.pgn);
       game.current = loadedGame;
+
+      // set solution
+      const solutionGame = new Chess(game.current.fen());
+      const loadedSolution = [];
+
+      for (let i = 0; i < puzzle.puzzle.solution.length; i++) {
+        const move = puzzle.puzzle.solution[i];
+        const moveObject = {
+          from: move.slice(0, 2),
+          to: move.slice(2, 4),
+        };
+        const result = solutionGame.move(moveObject);
+        if (result) {
+          loadedSolution.push(result.san);
+        }
+      }
+
+      solution.current = loadedSolution;
 
       setCurrentPosition(loadedGame.fen());
     }
@@ -103,35 +120,26 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     setCurrentPosition(game.current.fen());
   };
 
-  const getSolution = (): string[] => {
-    return (puzzle.puzzle.solution as string[]).map((move: string) =>
-      // get last square of square notation move
-      move.slice(-2)
-    );
-  };
-
   const submitGuess = () => {
     setNumberOfSubmissionsLeft((previous) => previous - 1);
     setGuessResults(compareGuessToSolution());
   };
 
+  const getSolution = () => {
+    return solution.current;
+  };
+
   // return indexes of guess moves that are in the correct position
   // as well as indexes of guess moves that are in the solution but in the wrong position
-  // TODO: need to account for correct piece being moved
   const compareGuessToSolution = () => {
-    const solution = getSolution();
-    // remove non square notation from the moves i.e moves that are not a number or a letter from a-h
-    const guessMoves = currentGuessMoves.map((move) =>
-      move.replace(/[^a-h&^0-8]/g, "")
-    );
     const correctMoves: number[] = [];
     const incorrectButIncludedMoves: number[] = [];
 
-    guessMoves.forEach((move, index) => {
-      console.log(move, solution[index]);
-      if (move.includes(solution[index])) {
+    currentGuessMoves.forEach((move, index) => {
+      console.log(move, solution.current[index]);
+      if (move === solution.current[index]) {
         correctMoves.push(index);
-      } else if (solution.includes(move)) {
+      } else if (solution.current.includes(move)) {
         incorrectButIncludedMoves.push(index);
       }
     });
@@ -149,6 +157,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     isSolved,
     currentGuessMoves,
     guessResults,
+    solution,
     getSolution,
     makeGuessMove,
     removeLastGuessMove,
