@@ -1,7 +1,9 @@
+import { useMemo } from "react";
 import { useGameContext } from "../contexts/game";
 
 export default function Actions() {
-  const { removeLastGuessMove, submitGuess } = useGameContext();
+  const { removeLastGuessMove, submitGuess, currentGuessMoves } =
+    useGameContext();
 
   const handleUndo = () => {
     removeLastGuessMove();
@@ -11,11 +13,23 @@ export default function Actions() {
     submitGuess();
   };
 
+  const enterDisabled = useMemo(() => {
+    return currentGuessMoves.includes("");
+  }, [currentGuessMoves]);
+
+  const undoDisabled = useMemo(() => {
+    return currentGuessMoves.every((move) => move === "");
+  }, [currentGuessMoves]);
+
   return (
     <div>
-      <button onClick={handleUndo}>Undo</button>
+      <button onClick={handleUndo} disabled={undoDisabled}>
+        Undo
+      </button>
       <span style={{ margin: 5 }}></span>
-      <button onClick={handleEnter}>Enter</button>
+      <button onClick={handleEnter} disabled={enterDisabled}>
+        Enter
+      </button>
     </div>
   );
 }
