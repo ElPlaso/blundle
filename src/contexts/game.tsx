@@ -1,11 +1,11 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { Chess } from "chess.js";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const GameContext = createContext<GameContextType>(null as any);
 
 interface GameContextType {
-  game: Chess | null;
+  currentPosition: string | null;
   numberOfSubmissionsLeft: number;
   isSolved: boolean;
   currentGuessMoves: string[];
@@ -34,11 +34,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     useState<number>(MAX_GUESSES);
   const [isSolved, setIsSolved] = useState<boolean>(false);
 
-  const [game, setGame] = useState<Chess | null>(null);
+  const game = useRef<Chess>(new Chess());
+  const [currentPosition, setCurrentPosition] = useState<string | null>(null);
 
   function makeAMove(move: { from: string; to: string; promotion: string }) {
-    const result = game!.move(move);
-    setGame(new Chess(game!.fen()));
+    const result = game.current.move(move);
+    setCurrentPosition(game.current.fen());
     return result;
   }
 
@@ -62,11 +63,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       const response = await fetch(url);
       const puzzle = await response.json();
       setPuzzle(puzzle);
+      const loadedGame = new Chess();
+      loadedGame.loadPgn(puzzle.game.pgn);
+      game.current = loadedGame;
 
-      const game = new Chess();
-      game.loadPgn(puzzle.game.pgn);
-
-      setGame(game);
+      setCurrentPosition(loadedGame.fen());
     }
 
     fetchPuzzle();
@@ -82,9 +83,15 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   };
 
   const removeLastGuessMove = () => {
-    setCurrentGuessMoves(
-      currentGuessMoves.slice(0, currentGuessMoves.length - 1)
+    const currentGuessMovesCopy = [...currentGuessMoves].reverse();
+    const lastMoveIndex = currentGuessMovesCopy.findIndex(
+      (move) => move !== ""
     );
+    if (lastMoveIndex === -1) return;
+    currentGuessMovesCopy[lastMoveIndex] = "";
+    setCurrentGuessMoves(currentGuessMovesCopy.reverse());
+    game.current.undo();
+    setCurrentPosition(game.current.fen());
   };
 
   const getSolution = () => {
@@ -123,7 +130,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   };
 
   const value = {
-    game,
+    currentPosition,
     numberOfSubmissionsLeft,
     isSolved,
     currentGuessMoves,

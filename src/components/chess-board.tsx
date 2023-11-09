@@ -2,9 +2,9 @@ import { Chessboard } from "react-chessboard";
 import { useGameContext } from "../contexts/game";
 
 export default function ChessBoard() {
-  const { game, onDrop } = useGameContext();
+  const { currentPosition, onDrop } = useGameContext();
 
-  if (!game) return <div>Loading...</div>;
+  if (!currentPosition) return <div>Loading...</div>;
 
-  return <Chessboard position={game.fen()} onPieceDrop={onDrop} />;
+  return <Chessboard position={currentPosition} onPieceDrop={onDrop} />;
 }
