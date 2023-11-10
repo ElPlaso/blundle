@@ -8,19 +8,20 @@ function App() {
   return (
     <GameProvider>
       <h1>ChessPuzzle</h1>
-      <div style={{ width: "540px", margin: "auto" }}>
+      <div style={{ display: "flex" }}>
         <div
           style={{
-            width: "100%",
-            height: "540px",
+            width: "540px",
           }}
         >
-          <ChessBoard />
+          <div style={{ width: "100%", height: "540px", marginBottom: "20px" }}>
+            <ChessBoard />
+          </div>
+          <Actions />
         </div>
-        <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+        <div style={{ marginLeft: "20px", width: "540px" }}>
           <GuessingArea />
         </div>
-        <Actions />
       </div>
     </GameProvider>
   );

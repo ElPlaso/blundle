@@ -1,38 +1,81 @@
+import { memo } from "react";
 import { useGameContext } from "../contexts/game";
 
 export default function GuessingArea() {
-  const { currentGuessMoves, guessResults } = useGameContext();
+  const { currentGuessMoves, numberOfSubmissions, allGuesses, guessResults } =
+    useGameContext();
 
-  const { correctMoves, incorrectButIncludedMoves } = guessResults;
+  const TileComponent = memo(
+    (props: {
+      move: string;
+      index: number;
+      guessIndex: number;
+      guessLength: number;
+    }) => (
+      <div
+        className="move-tile"
+        key={props.index}
+        style={{
+          border: "solid #213547",
+          height: "80px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          backgroundColor: guessResults[props.guessIndex].correctMoves.includes(
+            props.index
+          )
+            ? "green"
+            : guessResults[props.guessIndex].incorrectButIncludedMoves.includes(
+                props.index
+              )
+            ? "orange"
+            : props.move !== ""
+            ? "#213547"
+            : "",
+          color: props.move !== "" ? "white" : "",
+          fontWeight: "bold",
+          borderRadius: "5px",
+          transition: "background-color 0.5s",
+          marginRight: props.index != props.guessLength - 1 ? "5px" : "0px",
+        }}
+      >
+        {props.move}
+      </div>
+    )
+  );
+
+  const TileRowComponent = memo(
+    (props: { list: string[]; guessIndex: number; guessLength: number }) => {
+      return (
+        <>
+          {props.list.map((move, index) => (
+            <TileComponent
+              move={move}
+              index={index}
+              guessIndex={props.guessIndex}
+              guessLength={props.guessLength}
+            />
+          ))}
+        </>
+      );
+    }
+  );
 
   return (
-    <div style={{ display: "flex" }}>
-      {currentGuessMoves.map((move, index) => (
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      {allGuesses.map((guess, index) => (
         <div
-          className="move-tile"
-          key={index}
           style={{
-            border: "solid #213547",
-            height: "80px",
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            backgroundColor: correctMoves.includes(index)
-              ? "green"
-              : incorrectButIncludedMoves.includes(index)
-              ? "orange"
-              : move !== ""
-              ? "#213547"
-              : "",
-            color: move !== "" ? "white" : "",
-            fontWeight: "bold",
-            borderRadius: "5px",
-            transition: "background-color 0.5s",
-            marginRight: index != currentGuessMoves.length - 1 ? "10px" : "0px",
+            marginBottom: index != allGuesses.length - 1 ? "5px" : "0px",
           }}
         >
-          {move}
+          <TileRowComponent
+            list={index === numberOfSubmissions ? currentGuessMoves : guess}
+            guessIndex={index}
+            guessLength={guess.length}
+          />
         </div>
       ))}
     </div>
