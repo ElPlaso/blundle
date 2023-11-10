@@ -9,6 +9,7 @@ interface GameContextType {
   numberOfSubmissions: number;
   isSolved: boolean;
   isLost: boolean;
+  toWin: "White" | "Black";
   currentGuessMoves: string[];
   allGuesses: string[][];
   guessResults: GuessResults[];
@@ -51,6 +52,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const position = useRef<string | null>(null);
   const solution = useRef<string[]>([]);
   const [currentPosition, setCurrentPosition] = useState<string | null>(null);
+  const [toWin, setToWin] = useState<"White" | "Black">(
+    "White" as "White" | "Black"
+  );
 
   const [guessResults, setGuessResults] = useState<GuessResults[]>(
     Array.from({ length: MAX_GUESSES }, () => {
@@ -90,6 +94,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       game.current = loadedGame;
 
       position.current = loadedGame.fen();
+      setToWin(loadedGame.turn() === "w" ? "White" : "Black");
 
       // set solution
       const solutionGame = new Chess(position.current);
@@ -190,6 +195,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     numberOfSubmissions,
     isSolved,
     isLost,
+    toWin,
     currentGuessMoves,
     allGuesses,
     guessResults,
