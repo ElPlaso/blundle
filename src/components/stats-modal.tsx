@@ -8,9 +8,10 @@ import {
   Slide,
 } from "@mui/material";
 import { BarChart, Close, Share } from "@mui/icons-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import { TransitionProps } from "@mui/material/transitions";
+import { useGameContext } from "../contexts/game";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -24,10 +25,17 @@ const Transition = React.forwardRef(function Transition(
 
 export default function StatsModal() {
   const [open, setOpen] = useState(false);
+  const { isSolved, isLost } = useGameContext();
 
   const toggleOpen = () => setOpen((prev) => !prev);
 
   const handleShare = () => {};
+
+  useEffect(() => {
+    if (isSolved || isLost) {
+      setOpen(true);
+    }
+  }, [isSolved, isLost]);
 
   return (
     <div>
@@ -69,7 +77,9 @@ export default function StatsModal() {
             </IconButton>
           </DialogTitle>
           <DialogContent>
-            <DialogContentText></DialogContentText>
+            <DialogContentText>
+              {isSolved ? "You win!" : isLost ? "You lose!" : "Playing..."}
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <button
