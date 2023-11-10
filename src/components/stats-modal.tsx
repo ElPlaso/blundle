@@ -6,6 +6,7 @@ import {
   DialogTitle,
   IconButton,
   Slide,
+  Snackbar,
 } from "@mui/material";
 import { BarChart, Close, Share } from "@mui/icons-material";
 import { useEffect, useState } from "react";
@@ -25,11 +26,48 @@ const Transition = React.forwardRef(function Transition(
 
 export default function StatsModal() {
   const [open, setOpen] = useState(false);
-  const { isSolved, isLost } = useGameContext();
+  const [showSnackbar, setShowSnackbar] = useState(false);
+
+  const { isSolved, isLost, guessResults, allGuesses, numberOfSubmissions } =
+    useGameContext();
 
   const toggleOpen = () => setOpen((prev) => !prev);
 
-  const handleShare = () => {};
+  const handleShare = () => {
+    let shareString = "";
+
+    if (isLost) {
+      shareString += "I blundered today's chess puzzle! \n";
+    } else if (isSolved) {
+      shareString += `I solved today's chess puzzle in ${numberOfSubmissions} ${
+        numberOfSubmissions > 1 ? "tries" : "try"
+      }! \n`;
+    }
+
+    let emojiString = "";
+    for (let i = 0; i < allGuesses.length; i++) {
+      let guessEmojiString = "";
+      for (let j = 0; j < allGuesses[i].length; j++) {
+        if (guessResults[i].correctMoves.includes(j)) {
+          guessEmojiString += "🟩";
+        } else if (guessResults[i].incorrectButIncludedMoves.includes(j)) {
+          guessEmojiString += "🟨";
+        } else {
+          guessEmojiString += "⬛";
+        }
+      }
+      emojiString += `${guessEmojiString}\n`;
+    }
+
+    shareString += `${emojiString}`;
+
+    shareString += "#chesspuzzle";
+
+    // copy to clipboard
+    navigator.clipboard.writeText(shareString);
+
+    setShowSnackbar(true);
+  };
 
   useEffect(() => {
     if (isSolved || isLost) {
@@ -87,6 +125,7 @@ export default function StatsModal() {
               style={{
                 display: "flex",
               }}
+              disabled={!isSolved && !isLost}
             >
               Share
               <Share style={{ marginLeft: "1rem" }} />
@@ -94,6 +133,12 @@ export default function StatsModal() {
           </DialogActions>
         </div>
       </Dialog>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={showSnackbar}
+        onClose={() => setShowSnackbar(false)}
+        message="Copied results to clipboard"
+      />
     </div>
   );
 }
