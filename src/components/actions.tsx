@@ -2,8 +2,13 @@ import { useMemo } from "react";
 import { useGameContext } from "../contexts/game";
 
 export default function Actions() {
-  const { removeLastGuessMove, submitGuess, currentGuessMoves } =
-    useGameContext();
+  const {
+    removeLastGuessMove,
+    submitGuess,
+    currentGuessMoves,
+    isSolved,
+    isLost,
+  } = useGameContext();
 
   const handleUndo = () => {
     removeLastGuessMove();
@@ -23,11 +28,17 @@ export default function Actions() {
 
   return (
     <div>
-      <button onClick={handleUndo} disabled={undoDisabled}>
+      <button
+        onClick={handleUndo}
+        disabled={undoDisabled || isSolved || isLost}
+      >
         Undo
       </button>
       <span style={{ margin: 5 }}></span>
-      <button onClick={handleEnter} disabled={enterDisabled}>
+      <button
+        onClick={handleEnter}
+        disabled={enterDisabled || isSolved || isLost}
+      >
         Enter
       </button>
     </div>

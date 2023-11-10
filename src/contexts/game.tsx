@@ -8,6 +8,7 @@ interface GameContextType {
   currentPosition: string | null;
   numberOfSubmissions: number;
   isSolved: boolean;
+  isLost: boolean;
   currentGuessMoves: string[];
   allGuesses: string[][];
   guessResults: GuessResults[];
@@ -44,6 +45,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const [numberOfSubmissions, setNumberOfSubmissions] = useState<number>(0);
   const [isSolved, setIsSolved] = useState<boolean>(false);
+  const [isLost, setIsLost] = useState<boolean>(false);
 
   const game = useRef<Chess>(new Chess());
   const position = useRef<string | null>(null);
@@ -63,7 +65,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }
 
   function onDrop(sourceSquare: string, targetSquare: string) {
-    if (currentGuessMoves.findIndex((move) => move === "") === -1) return false;
+    if (isSolved || currentGuessMoves.findIndex((move) => move === "") === -1) {
+      return false;
+    }
 
     const move = makeAMove({
       from: sourceSquare,
@@ -139,12 +143,21 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       return previous;
     });
     setNumberOfSubmissions((previous) => previous + 1);
+    const result = compareGuessToSolution();
     setGuessResults((previous) => {
-      previous[numberOfSubmissions] = compareGuessToSolution();
+      previous[numberOfSubmissions] = result;
       return previous;
     });
     // clear current guess moves
     setCurrentGuessMoves(Array.from({ length: NUM_MOVES_PER_GUESS }, () => ""));
+
+    if (result.correctMoves.length === NUM_MOVES_PER_GUESS) {
+      setIsSolved(true);
+      return;
+    } else if (numberOfSubmissions === MAX_GUESSES - 1) {
+      setIsLost(true);
+      return;
+    }
     // reset board
     game.current.load(position.current!);
     setCurrentPosition(game.current.fen());
@@ -169,10 +182,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    if (correctMoves.length === NUM_MOVES_PER_GUESS) {
-      setIsSolved(true);
-    }
-
     return { correctMoves, incorrectButIncludedMoves };
   };
 
@@ -180,6 +189,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     currentPosition,
     numberOfSubmissions,
     isSolved,
+    isLost,
     currentGuessMoves,
     allGuesses,
     guessResults,
