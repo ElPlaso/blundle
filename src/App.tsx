@@ -2,13 +2,14 @@ import "./App.css";
 import Actions from "./components/actions";
 import ChessBoard from "./components/chess-board";
 import GuessingArea from "./components/guessing-area";
+import TopAppBar from "./components/top-app-bar";
 import { GameProvider } from "./contexts/game";
 
 function App() {
   return (
     <GameProvider>
-      <h1>ChessPuzzle</h1>
-      <div style={{ display: "flex" }}>
+      <TopAppBar />
+      <div style={{ display: "flex", marginTop: "4rem" }}>
         <div
           style={{
             width: "540px",
