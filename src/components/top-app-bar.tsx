@@ -1,3 +1,5 @@
+import StatsModal from "./stats-modal";
+
 export default function TopAppBar() {
   return (
     <header
@@ -11,11 +13,13 @@ export default function TopAppBar() {
         zIndex: 1,
         height: "4rem",
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
       }}
     >
+      <span></span>
       <h1>ChessPuzzle</h1>
+      <StatsModal />
     </header>
   );
 }
