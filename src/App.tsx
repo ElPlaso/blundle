@@ -15,7 +15,7 @@ function App() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          marginTop: "4rem",
+          margin: "1rem",
         }}
       >
         <Subheading />
