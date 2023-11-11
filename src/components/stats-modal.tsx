@@ -57,6 +57,9 @@ export default function StatsModal() {
         }
       }
       emojiString += `${guessEmojiString}\n`;
+      if (guessEmojiString === "🟩".repeat(allGuesses[i].length)) {
+        break;
+      }
     }
 
     shareString += `${emojiString}`;
