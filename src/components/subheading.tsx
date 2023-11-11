@@ -5,5 +5,5 @@ export default function Subheading() {
 
   if (!currentPosition) return <h3>Loading...</h3>;
 
-  return <h3>{toWin} to win</h3>;
+  return <h3>"{toWin} to win"</h3>;
 }

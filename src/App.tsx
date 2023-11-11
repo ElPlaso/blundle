@@ -10,20 +10,35 @@ function App() {
   return (
     <GameProvider>
       <TopAppBar />
-      <div style={{ display: "flex", marginTop: "4rem" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          marginTop: "4rem",
+        }}
+      >
+        <Subheading />
         <div
           style={{
-            width: "540px",
+            display: "flex",
           }}
         >
-          <div style={{ width: "100%", height: "540px", marginBottom: "20px" }}>
-            <ChessBoard />
+          <div
+            style={{
+              width: "540px",
+            }}
+          >
+            <div
+              style={{ width: "100%", height: "540px", marginBottom: "20px" }}
+            >
+              <ChessBoard />
+            </div>
+            <Actions />
           </div>
-          <Subheading />
-          <Actions />
-        </div>
-        <div style={{ marginLeft: "20px", width: "540px" }}>
-          <GuessingArea />
+          <div style={{ marginLeft: "20px", width: "540px" }}>
+            <GuessingArea />
+          </div>
         </div>
       </div>
     </GameProvider>
