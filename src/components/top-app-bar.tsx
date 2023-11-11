@@ -11,15 +11,18 @@ export default function TopAppBar() {
         color: "white",
         boxShadow: "0px 0px 5px 0px rgba(0,0,0,0.75)",
         zIndex: 1,
-        height: "4rem",
+        maxHeight: "4rem",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        flex: 1,
       }}
     >
-      <span></span>
-      <h1>ChessPuzzle</h1>
-      <StatsModal />
+      <span style={{ flex: 1 }}></span>
+      <h1 style={{ flex: 1 }}>ChessPuzzle</h1>
+      <div style={{ flex: 1 }}>
+        <StatsModal />
+      </div>
     </header>
   );
 }

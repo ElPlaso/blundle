@@ -35,12 +35,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [currentGuessMoves, setCurrentGuessMoves] = useState<string[]>([]);
-  const [allGuesses, setAllGuesses] = useState<string[][]>(
-    []
-    // Array.from({ length: MAX_GUESSES }, () =>
-    //   Array.from({ length: NUM_MOVES_PER_GUESS }, () => "")
-    // )
-  );
+  const [allGuesses, setAllGuesses] = useState<string[][]>([]);
 
   const [numberOfSubmissions, setNumberOfSubmissions] = useState<number>(0);
   const [isSolved, setIsSolved] = useState<boolean>(false);
