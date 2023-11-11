@@ -32,16 +32,14 @@ interface GuessResults {
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const MAX_GUESSES = 6;
-  const NUM_MOVES_PER_GUESS = 6;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [currentGuessMoves, setCurrentGuessMoves] = useState<string[]>(
-    Array.from({ length: NUM_MOVES_PER_GUESS }, () => "")
-  );
+  const [currentGuessMoves, setCurrentGuessMoves] = useState<string[]>([]);
   const [allGuesses, setAllGuesses] = useState<string[][]>(
-    Array.from({ length: MAX_GUESSES }, () =>
-      Array.from({ length: NUM_MOVES_PER_GUESS }, () => "")
-    )
+    []
+    // Array.from({ length: MAX_GUESSES }, () =>
+    //   Array.from({ length: NUM_MOVES_PER_GUESS }, () => "")
+    // )
   );
 
   const [numberOfSubmissions, setNumberOfSubmissions] = useState<number>(0);
@@ -51,6 +49,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const game = useRef<Chess>(new Chess());
   const position = useRef<string | null>(null);
   const solution = useRef<string[]>([]);
+  const numberOfMovesPerGuess = useRef<number>(0);
   const [currentPosition, setCurrentPosition] = useState<string | null>(null);
   const [toWin, setToWin] = useState<"White" | "Black">(
     "White" as "White" | "Black"
@@ -69,7 +68,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }
 
   function onDrop(sourceSquare: string, targetSquare: string) {
-    if (isSolved || currentGuessMoves.findIndex((move) => move === "") === -1) {
+    if (
+      isSolved ||
+      currentGuessMoves!.findIndex((move) => move === "") === -1
+    ) {
       return false;
     }
 
@@ -100,7 +102,21 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       const solutionGame = new Chess(position.current);
       const loadedSolution = [];
 
-      for (let i = 0; i < puzzle.puzzle.solution.length; i++) {
+      const solutionLength = puzzle.puzzle.solution.length;
+
+      numberOfMovesPerGuess.current = solutionLength;
+
+      setCurrentGuessMoves(
+        Array.from({ length: numberOfMovesPerGuess.current }, () => "")
+      );
+
+      setAllGuesses(
+        Array.from({ length: MAX_GUESSES }, () =>
+          Array.from({ length: numberOfMovesPerGuess.current }, () => "")
+        )
+      );
+
+      for (let i = 0; i < solutionLength; i++) {
         const move = puzzle.puzzle.solution[i];
         const moveObject = {
           from: move.slice(0, 2),
@@ -122,7 +138,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const makeGuessMove = (guessMove: string) => {
-    const currentGuessMovesCopy = [...currentGuessMoves];
+    const currentGuessMovesCopy = [...currentGuessMoves!];
     const emptyIndex = currentGuessMovesCopy.findIndex((move) => move === "");
     if (emptyIndex === -1) return;
     currentGuessMovesCopy[emptyIndex] = guessMove;
@@ -130,7 +146,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   };
 
   const removeLastGuessMove = () => {
-    const currentGuessMovesCopy = [...currentGuessMoves].reverse();
+    const currentGuessMovesCopy = [...currentGuessMoves!].reverse();
     const lastMoveIndex = currentGuessMovesCopy.findIndex(
       (move) => move !== ""
     );
@@ -154,9 +170,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       return previous;
     });
     // clear current guess moves
-    setCurrentGuessMoves(Array.from({ length: NUM_MOVES_PER_GUESS }, () => ""));
+    setCurrentGuessMoves(
+      Array.from({ length: numberOfMovesPerGuess.current }, () => "")
+    );
 
-    if (result.correctMoves.length === NUM_MOVES_PER_GUESS) {
+    if (result.correctMoves.length === numberOfMovesPerGuess.current) {
       setIsSolved(true);
       return;
     } else if (numberOfSubmissions === MAX_GUESSES - 1) {

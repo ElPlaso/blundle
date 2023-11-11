@@ -35,7 +35,6 @@ export default function GuessingArea() {
             : "",
           color: props.move !== "" ? "white" : "",
           fontWeight: "bold",
-          borderRadius: "5px",
           transition: "background-color 0.5s",
           marginRight: props.index != props.guessLength - 1 ? "5px" : "0px",
         }}
