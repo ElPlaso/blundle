@@ -119,8 +119,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
         solution.current = currentSetGame.solution;
         position.current = currentSetGame.fen;
-
-        setCurrentPosition(currentSetGame.fen);
       } else {
         game.current = loadedGame;
 
@@ -161,9 +159,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           didFinish: isSolved || isLost,
           guessResults,
         });
-
-        setCurrentPosition(position.current);
       }
+
+      setCurrentPosition(game.current.fen());
     }
 
     fetchPuzzle();
@@ -187,7 +185,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPosition, isSolved, isLost]);
+  }, [currentPosition, guessResults, isSolved, isLost]);
 
   const makeGuessMove = (guessMove: string) => {
     const currentGuessMovesCopy = [...currentGuessMoves!];
