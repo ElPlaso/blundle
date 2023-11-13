@@ -52,6 +52,7 @@ export default function GuessingArea() {
             <TileComponent
               move={move}
               index={index}
+              key={index}
               guessIndex={props.guessIndex}
               guessLength={props.guessLength}
             />
@@ -69,6 +70,7 @@ export default function GuessingArea() {
             display: "flex",
             marginBottom: index != allGuesses.length - 1 ? "5px" : "0px",
           }}
+          key={index}
         >
           <TileRowComponent
             list={index === numberOfSubmissions ? currentGuessMoves : guess}
