@@ -53,7 +53,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     })
   );
 
-  function makeAMove(move: { from: string; to: string; promotion: string }) {
+  function makeAMove(move: { from: string; to: string; promotion?: string }) {
     const result = game.current.move(move);
     setCurrentPosition(game.current.fen());
     return result;
@@ -70,10 +70,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     const move = makeAMove({
       from: sourceSquare,
       to: targetSquare,
-      promotion: "q",
+      promotion: "q", // TODO: handle user promtion selection
     });
 
     if (move === null) return false;
+
     makeGuessMove(move.san);
     return true;
   }
@@ -136,9 +137,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
         for (let i = 0; i < solutionLength; i++) {
           const move = puzzle.puzzle.solution[i];
+          // get potential promotion
+          const promotion = solutionLength === 5 ? move.slice(4, 5) : "q";
           const moveObject = {
             from: move.slice(0, 2),
             to: move.slice(2, 4),
+            promotion: promotion,
           };
           const result = solutionGame.move(moveObject);
           if (result) {
