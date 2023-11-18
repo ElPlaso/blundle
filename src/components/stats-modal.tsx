@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { TransitionProps } from "@mui/material/transitions";
 import { useGameContext } from "../contexts/game";
+import { getGameHistory } from "../lib/history";
+import { SavedGame } from "../lib/types";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -78,6 +80,18 @@ export default function StatsModal() {
     }
   }, [isSolved, isLost]);
 
+  const history: SavedGame[] = getGameHistory();
+
+  const numberOfGamesPlayed = history.length;
+
+  const wonGames = history.filter((game) => game.didWin);
+
+  const numberOfGamesWon = wonGames.length;
+
+  const averageNumberOfGuesses =
+    wonGames.reduce((acc, game) => acc + game.numberOfSubmissions, 0) /
+      numberOfGamesWon || null;
+
   return (
     <div>
       <IconButton
@@ -120,6 +134,13 @@ export default function StatsModal() {
           <DialogContent>
             <DialogContentText>
               {isSolved ? "You win!" : isLost ? "You lose!" : "Playing..."}
+            </DialogContentText>
+            <DialogContentText>
+              <div>Games Played: {numberOfGamesPlayed}</div>
+              <div>Games Won: {numberOfGamesWon}</div>
+              <div>
+                Average number of guesses: {averageNumberOfGuesses ?? "-"}
+              </div>
             </DialogContentText>
           </DialogContent>
           <DialogActions>

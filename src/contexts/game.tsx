@@ -1,6 +1,11 @@
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { Chess } from "chess.js";
-import { getCurrentGame, saveGame, setCurrentGame } from "../lib/history";
+import {
+  getCurrentGame,
+  getGameHistory,
+  saveGame,
+  setCurrentGame,
+} from "../lib/history";
 import { GuessResults, SavedGame } from "../lib/types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -164,7 +169,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           guessResults,
         });
       }
-
       setCurrentPosition(game.current.fen());
     }
 
@@ -186,10 +190,16 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         didFinish: isSolved || isLost,
         guessResults: guessResults,
       });
-    }
 
-    if (isSolved || isLost) {
-      saveGame(getCurrentGame());
+      const history = getGameHistory();
+
+      if (isSolved || isLost) {
+        if (history.length === 0) {
+          saveGame(getCurrentGame());
+        } else if (history[history.length - 1].id != gameToUpdate.id) {
+          saveGame(getCurrentGame());
+        }
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
