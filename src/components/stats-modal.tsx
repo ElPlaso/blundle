@@ -115,15 +115,7 @@ export default function StatsModal() {
         aria-labelledby="dialog"
         TransitionComponent={Transition}
       >
-        <div
-          style={{
-            width: "540px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            marginBottom: "1rem",
-          }}
-        >
+        <div className="w-[540px] flex flex-col items-center mb-4">
           <DialogTitle
             style={{
               display: "flex",
@@ -155,13 +147,11 @@ export default function StatsModal() {
           <DialogActions>
             <button
               onClick={handleShare}
-              style={{
-                display: "flex",
-              }}
+              className="flex gap-x-4"
               disabled={!isSolved && !isLost}
             >
               Share
-              <Share style={{ marginLeft: "1rem" }} />
+              <Share />
             </button>
           </DialogActions>
         </div>

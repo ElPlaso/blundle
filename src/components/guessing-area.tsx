@@ -13,31 +13,18 @@ export default function GuessingArea() {
       guessLength: number;
     }) => (
       <div
-        className="move-tile"
         key={props.index}
-        style={{
-          border: "solid #213547",
-          height: "80px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "100%",
-          backgroundColor: guessResults[props.guessIndex].correctMoves.includes(
-            props.index
-          )
-            ? "green"
+        className={`border-2 border-[#213547] w-full flex justify-center items-center h-20 font-bold transition-all duration-500 ${
+          guessResults[props.guessIndex].correctMoves.includes(props.index)
+            ? "bg-green-600"
             : guessResults[props.guessIndex].incorrectButIncludedMoves.includes(
                 props.index
               )
-            ? "orange"
+            ? "bg-yellow-600"
             : props.move !== ""
-            ? "#213547"
-            : "",
-          color: props.move !== "" ? "white" : "",
-          fontWeight: "bold",
-          transition: "background-color 0.5s",
-          marginRight: props.index != props.guessLength - 1 ? "5px" : "0px",
-        }}
+            ? "bg-[#213547]"
+            : ""
+        } ${props.move !== "" && "text-white"}`}
       >
         {props.move}
       </div>
@@ -47,7 +34,7 @@ export default function GuessingArea() {
   const TileRowComponent = memo(
     (props: { list: string[]; guessIndex: number; guessLength: number }) => {
       return (
-        <>
+        <div className="flex gap-x-2">
           {props.list.map((move, index) => (
             <TileComponent
               move={move}
@@ -57,21 +44,15 @@ export default function GuessingArea() {
               guessLength={props.guessLength}
             />
           ))}
-        </>
+        </div>
       );
     }
   );
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
+    <div className="flex flex-col gap-y-2">
       {allGuesses.map((guess, index) => (
-        <div
-          style={{
-            display: "flex",
-            marginBottom: index != allGuesses.length - 1 ? "5px" : "0px",
-          }}
-          key={index}
-        >
+        <div key={index}>
           <TileRowComponent
             list={index === numberOfSubmissions ? currentGuessMoves : guess}
             guessIndex={index}

@@ -27,14 +27,13 @@ export default function Actions() {
   }, [currentGuessMoves]);
 
   return (
-    <div>
+    <div className="flex gap-x-2">
       <button
         onClick={handleUndo}
         disabled={undoDisabled || isSolved || isLost}
       >
         Undo
       </button>
-      <span style={{ margin: 5 }}></span>
       <button
         onClick={handleEnter}
         disabled={enterDisabled || isSolved || isLost}
