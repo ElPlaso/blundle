@@ -100,13 +100,8 @@ export default function StatsModal() {
 
   return (
     <div>
-      <IconButton
-        size="large"
-        onClick={toggleOpen}
-        style={{ color: "white" }}
-        disableRipple
-      >
-        <BarChart fontSize="large" />
+      <IconButton size="large" onClick={toggleOpen} disableRipple>
+        <BarChart fontSize="large" className="text-black dark:text-white" />
       </IconButton>
       <Dialog
         fullScreen={false}
@@ -147,7 +142,7 @@ export default function StatsModal() {
           <DialogActions>
             <button
               onClick={handleShare}
-              className="flex gap-x-4"
+              className="flex gap-x-4 bg-lightCorrect rounded px-4 py-2 shadow cursor-pointer text-white disabled:bg-opacity-50 disabled:cursor-not-allowed"
               disabled={!isSolved && !isLost}
             >
               Share
