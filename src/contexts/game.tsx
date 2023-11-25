@@ -286,7 +286,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     currentGuessMoves,
     allGuesses,
     guessResults,
-    solution,
     getSolution,
     makeGuessMove,
     removeLastGuessMove,

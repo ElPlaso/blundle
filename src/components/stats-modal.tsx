@@ -30,8 +30,14 @@ export default function StatsModal() {
   const [open, setOpen] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
 
-  const { isSolved, isLost, guessResults, allGuesses, numberOfSubmissions } =
-    useGameContext();
+  const {
+    isSolved,
+    isLost,
+    guessResults,
+    allGuesses,
+    numberOfSubmissions,
+    getSolution,
+  } = useGameContext();
 
   const toggleOpen = () => setOpen((prev) => !prev);
 
@@ -134,6 +140,9 @@ export default function StatsModal() {
           <DialogContent>
             <DialogContentText>
               {isSolved ? "You win!" : isLost ? "You lose!" : "Playing..."}
+              {(isSolved || isLost) && (
+                <div>Solution: {getSolution().join(" ")}</div>
+              )}
             </DialogContentText>
             <DialogContentText>
               <div>Games Played: {numberOfGamesPlayed}</div>
