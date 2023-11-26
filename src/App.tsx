@@ -12,14 +12,14 @@ function App() {
       <TopAppBar />
       <div className="flex flex-col justify-center m-4 gap-y-2">
         <Subheading />
-        <div className="flex">
-          <div className="flex flex-col items-center w-[540px]">
-            <div className="w-full h-[540px] mb-4">
+        <div className="flex max-sm:flex-col max-sm:gap-y-4 gap-x-4">
+          <div className="flex lg:w-[504px] md:w-[300px] max-sm:w-[250px] flex-col items-center">
+            <div className="w-full lg:h-[504px] md:h-[300px] mb-4">
               <ChessBoard />
             </div>
             <Actions />
           </div>
-          <div className="ml-[20px] w-[540px]">
+          <div className="lg:w-[504px] lg:h-[504px] md:w-[300px] sm:w-[250px]">
             <GuessingArea />
           </div>
         </div>

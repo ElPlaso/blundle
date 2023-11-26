@@ -18,8 +18,7 @@ import { SavedGame } from "../lib/types";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    children: React.ReactElement<any, any>;
+    children: React.ReactElement;
   },
   ref: React.Ref<unknown>
 ) {
@@ -92,21 +91,20 @@ export default function StatsModal() {
 
   const wonGames = history.filter((game) => game.didWin);
 
-  const numberOfGamesWon = wonGames.length;
+  const winPercentage = Math.round(
+    (wonGames.length / numberOfGamesPlayed) * 100
+  );
 
   const averageNumberOfGuesses =
-    wonGames.reduce((acc, game) => acc + game.numberOfSubmissions, 0) /
-      numberOfGamesWon || null;
+    Math.round(
+      history.reduce((acc, game) => acc + game.numberOfSubmissions, 0) /
+        history.length
+    ) || null;
 
   return (
     <div>
-      <IconButton
-        size="large"
-        onClick={toggleOpen}
-        style={{ color: "white" }}
-        disableRipple
-      >
-        <BarChart fontSize="large" />
+      <IconButton size="large" onClick={toggleOpen} disableRipple>
+        <BarChart fontSize="large" className="text-black dark:text-white" />
       </IconButton>
       <Dialog
         fullScreen={false}
@@ -115,39 +113,47 @@ export default function StatsModal() {
         aria-labelledby="dialog"
         TransitionComponent={Transition}
       >
-        <div className="w-[540px] flex flex-col items-center mb-4">
-          <DialogTitle
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              width: "90%",
-            }}
-          >
-            <h2>Statistics</h2>
+        <div className="lg:w-[504px] flex flex-col items-center dark:bg-darkBackground">
+          <DialogTitle className="flex w-full justify-between items-center">
+            <h2 className="text-xl font-bold dark:text-white">STATISTICS</h2>
             <IconButton onClick={toggleOpen} disableRipple>
-              <Close />
+              <Close className="text-black dark:text-white" />
             </IconButton>
           </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {isSolved ? "You win!" : isLost ? "You lose!" : "Playing..."}
-              {(isSolved || isLost) && (
-                <div>Solution: {getSolution().join(" ")}</div>
-              )}
-            </DialogContentText>
-            <DialogContentText>
-              <div>Games Played: {numberOfGamesPlayed}</div>
-              <div>Games Won: {numberOfGamesWon}</div>
-              <div>
-                Average number of guesses: {averageNumberOfGuesses ?? "-"}
+          <DialogContent className="flex flex-col w-full gap-y-8">
+            <DialogContentText className="flex w-full justify-between">
+              <div className="flex flex-col items-center text-black dark:text-white">
+                <span className="text-3xl font-semi-bold">
+                  {numberOfGamesPlayed}
+                </span>
+                Played
               </div>
+              <div className="flex flex-col items-center text-black dark:text-white">
+                <span className="text-3xl font-semi-bold">{winPercentage}</span>
+                Win %{" "}
+              </div>
+              <div className="flex flex-col items-center text-black dark:text-white">
+                <span className="text-3xl font-semi-bold">
+                  {averageNumberOfGuesses ?? "-"}
+                </span>
+                Average
+              </div>
+            </DialogContentText>
+            <DialogContentText className="flex flex-col justify-center items-center gap-y-2">
+              <h2 className="text-3xl font-bold text-black dark:text-white">
+                {isSolved ? "You win!" : isLost ? "You lose!" : "Playing..."}
+              </h2>
+              {(isSolved || isLost) && (
+                <div className="text-lightAbsent">
+                  Solution: {getSolution().join(" ")}
+                </div>
+              )}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <button
               onClick={handleShare}
-              className="flex gap-x-4"
+              className="flex gap-x-4 bg-lightCorrect dark:bg-darkCorrect rounded px-4 py-2 shadow cursor-pointer text-white disabled:bg-opacity-50 disabled:cursor-not-allowed mb-4"
               disabled={!isSolved && !isLost}
             >
               Share

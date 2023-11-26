@@ -7,12 +7,19 @@ export default function ChessBoard() {
   if (!currentPosition) return <div></div>;
 
   return (
-    <div>
-      <Chessboard
-        position={currentPosition}
-        onPieceDrop={onDrop}
-        boardOrientation={toWin.toLocaleLowerCase() as "white" | "black"}
-      />
-    </div>
+    <Chessboard
+      position={currentPosition}
+      onPieceDrop={onDrop}
+      customBoardStyle={{
+        borderRadius: "4px",
+      }}
+      customLightSquareStyle={{
+        backgroundColor: "#edeed1",
+      }}
+      customDarkSquareStyle={{
+        backgroundColor: "#538d4e",
+      }}
+      boardOrientation={toWin.toLocaleLowerCase() as "white" | "black"}
+    />
   );
 }

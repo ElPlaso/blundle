@@ -11,20 +11,23 @@ export default function GuessingArea() {
       index: number;
       guessIndex: number;
       guessLength: number;
+      isCurrentGuess: boolean;
     }) => (
       <div
         key={props.index}
-        className={`border-2 border-[#213547] w-full flex justify-center items-center h-20 font-bold transition-all duration-500 ${
-          guessResults[props.guessIndex].correctMoves.includes(props.index)
-            ? "bg-green-600"
+        className={`border-2 rounded w-full flex justify-center lg:h-[77.5px] md:h-[43.4px] sm:h-[43.4px] max-sm:h-[50px] items-center font-bold transition-colors duration-500 ${
+          props.isCurrentGuess
+            ? "text-lightAbsent border-lightSecondary dark:text-darkAbsent dark:border-darkAbsent"
+            : guessResults[props.guessIndex].correctMoves.includes(props.index)
+            ? "bg-lightCorrect border-lightCorrect text-white dark:bg-darkCorrect dark:border-darkCorrect"
             : guessResults[props.guessIndex].incorrectButIncludedMoves.includes(
                 props.index
               )
-            ? "bg-yellow-600"
+            ? "bg-lightPresent border-lightPresent text-white dark:bg-darkPresent dark:border-darkPresent"
             : props.move !== ""
-            ? "bg-[#213547]"
-            : ""
-        } ${props.move !== "" && "text-white"}`}
+            ? "bg-lightAbsent border-lightAbsent dark:bg-darkAbsent dark:border-darkAbsent text-white"
+            : "border-lightSecondary dark:border-darkAbsent"
+        }`}
       >
         {props.move}
       </div>
@@ -42,6 +45,7 @@ export default function GuessingArea() {
               key={index}
               guessIndex={props.guessIndex}
               guessLength={props.guessLength}
+              isCurrentGuess={props.guessIndex === numberOfSubmissions}
             />
           ))}
         </div>
@@ -50,7 +54,7 @@ export default function GuessingArea() {
   );
 
   return (
-    <div className="flex flex-col gap-y-2">
+    <div className="flex flex-col gap-y-2 h-full">
       {allGuesses.map((guess, index) => (
         <div key={index}>
           <TileRowComponent
