@@ -15,7 +15,7 @@ export default function GuessingArea() {
     }) => (
       <div
         key={props.index}
-        className={`border-2 w-full flex justify-center items-center h-20 font-bold transition-all duration-500 ${
+        className={`border-2 w-full flex justify-center lg:h-[77.5px] md:h-[43.4px] sm:h-[43.4px] max-sm:h-[50px] items-center font-bold transition-colors duration-500 ${
           props.isCurrentGuess
             ? "text-lightAbsent border-lightSecondary dark:text-darkAbsent dark:border-darkAbsent"
             : guessResults[props.guessIndex].correctMoves.includes(props.index)
@@ -54,7 +54,7 @@ export default function GuessingArea() {
   );
 
   return (
-    <div className="flex flex-col gap-y-2">
+    <div className="flex flex-col gap-y-2 h-full">
       {allGuesses.map((guess, index) => (
         <div key={index}>
           <TileRowComponent
