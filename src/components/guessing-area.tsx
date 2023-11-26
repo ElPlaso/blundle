@@ -15,7 +15,7 @@ export default function GuessingArea() {
     }) => (
       <div
         key={props.index}
-        className={`border-2 w-full flex justify-center lg:h-[77.5px] md:h-[43.4px] sm:h-[43.4px] max-sm:h-[50px] items-center font-bold transition-colors duration-500 ${
+        className={`border-2 rounded w-full flex justify-center lg:h-[77.5px] md:h-[43.4px] sm:h-[43.4px] max-sm:h-[50px] items-center font-bold transition-colors duration-500 ${
           props.isCurrentGuess
             ? "text-lightAbsent border-lightSecondary dark:text-darkAbsent dark:border-darkAbsent"
             : guessResults[props.guessIndex].correctMoves.includes(props.index)

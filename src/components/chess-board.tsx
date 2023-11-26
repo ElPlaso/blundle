@@ -10,6 +10,15 @@ export default function ChessBoard() {
     <Chessboard
       position={currentPosition}
       onPieceDrop={onDrop}
+      customBoardStyle={{
+        borderRadius: "4px",
+      }}
+      customLightSquareStyle={{
+        backgroundColor: "#edeed1",
+      }}
+      customDarkSquareStyle={{
+        backgroundColor: "#538d4e",
+      }}
       boardOrientation={toWin.toLocaleLowerCase() as "white" | "black"}
     />
   );
