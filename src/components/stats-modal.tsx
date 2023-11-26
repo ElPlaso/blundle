@@ -91,9 +91,8 @@ export default function StatsModal() {
 
   const wonGames = history.filter((game) => game.didWin);
 
-  const winPercentage = Math.round(
-    (wonGames.length / numberOfGamesPlayed) * 100
-  );
+  const winPercentage =
+    Math.round((wonGames.length / numberOfGamesPlayed) * 100) || null;
 
   const averageNumberOfGuesses =
     Math.round(
@@ -129,7 +128,9 @@ export default function StatsModal() {
                 Played
               </div>
               <div className="flex flex-col items-center text-black dark:text-white">
-                <span className="text-3xl font-semi-bold">{winPercentage}</span>
+                <span className="text-3xl font-semi-bold">
+                  {winPercentage ?? "0"}
+                </span>
                 Win %{" "}
               </div>
               <div className="flex flex-col items-center text-black dark:text-white">
