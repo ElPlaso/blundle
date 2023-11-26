@@ -71,7 +71,7 @@ export default function StatsModal() {
 
     shareString += `${emojiString}`;
 
-    shareString += "#chesspuzzle";
+    shareString += "#blundle #dailychesspuzzle";
 
     // copy to clipboard
     navigator.clipboard.writeText(shareString);
