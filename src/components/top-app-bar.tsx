@@ -1,3 +1,4 @@
+import InfoModal from "./info-modal";
 import StatsModal from "./stats-modal";
 
 export default function TopAppBar() {
@@ -7,7 +8,8 @@ export default function TopAppBar() {
       <h1 className="flex-1 max-sm:flex-none font-bold text-2xl">
         ChessPuzzle
       </h1>
-      <div className="flex-1 max-sm:flex-none">
+      <div className="flex-1 flex max-sm:flex-none items-center justify-center -space-x-4">
+        <InfoModal />
         <StatsModal />
       </div>
     </header>
