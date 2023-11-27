@@ -61,10 +61,10 @@ export default function InfoModal() {
                     Each move is notated in{" "}
                     <a
                       target="_blank"
-                      href="https://en.wikipedia.org/wiki/Portable_Game_Notation"
+                      href="https://en.wikipedia.org/wiki/Algebraic_notation_(chess)"
                       className="font-bold hover:underline"
                     >
-                      PGN
+                      SAN
                     </a>{" "}
                     notation
                   </li>
