@@ -43,7 +43,7 @@ export default function InfoModal() {
               <h1 className="text-xl font-bold dark:text-white max-sm:text-lg pt-1.5">
                 How To Play
               </h1>
-              <h2 className="text-lightAbsent text-lg max-sm:text-xs">
+              <h2 className="text-lightAbsent text-sm">
                 Solve the <b>Chess Puzzle</b> in 6 tries
               </h2>
             </div>
@@ -53,7 +53,7 @@ export default function InfoModal() {
           </DialogTitle>
           <DialogContent className="flex flex-col w-full gap-y-4">
             <DialogContentText>
-              <div className="text-lightAbsent text-lg flex flex-col">
+              <div className="text-lightAbsent text-sm flex flex-col">
                 <ul className="list-disc ml-4 gap-y-2 flex flex-col">
                   <li>Find the best moves (including opponent moves)</li>
                   <li>Each move must be a legal move in the position</li>
@@ -77,7 +77,7 @@ export default function InfoModal() {
             </DialogContentText>
             <DialogContentText className="flex flex-col gap-y-2">
               <h3 className="font-bold text-black dark:text-white">Examples</h3>
-              <div className="text-lightAbsent flex flex-col gap-y-2">
+              <div className="text-lightAbsent flex flex-col gap-y-2 text-sm">
                 <ResultExample
                   moves={["e4", "e5", "Nf3"]}
                   type="Correct"
@@ -96,7 +96,7 @@ export default function InfoModal() {
               </div>
             </DialogContentText>
             <DialogContentText className="flex flex-col gap-y-2">
-              <div className="text-lightAbsent flex flex-col border-t pt-4 dark:border-darkAbsent">
+              <div className="text-lightAbsent flex flex-col border-t pt-4 dark:border-darkAbsent text-sm">
                 There is a new puzzle daily courtesy of
                 <a
                   target="_blank"
@@ -142,7 +142,7 @@ function ResultExample(props: {
           </div>
         ))}
       </div>
-      <div className="text-lg">
+      <div>
         <b>{moves[position]}</b> {subtitle[type]}
       </div>
     </div>
