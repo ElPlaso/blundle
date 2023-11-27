@@ -137,7 +137,7 @@ export default function StatsModal() {
               </div>
               <div className="flex flex-col items-center text-black dark:text-white">
                 <span className="text-3xl font-semi-bold">
-                  {averageNumberOfGuesses ?? "-"}
+                  {averageNumberOfGuesses ?? "0"}
                 </span>
                 Average
               </div>

@@ -35,7 +35,7 @@ export default function GuessingArea() {
     }) => (
       <div
         key={props.index}
-        className={`border-2 rounded w-full flex justify-center lg:h-[77.5px] md:h-[43.4px] sm:h-[43.4px] max-sm:h-[50px] items-center font-bold transition-colors duration-500 ${
+        className={`border-2 lg:rounded rounded-sm lg:text-lg sm:text-xs max-sm:text-xs max-sm:font-regular w-full flex justify-center lg:h-[77.5px] sm:h-[46.7px] max-sm:h-[50px] items-center font-semibold transition-colors duration-500 ${
           props.isCurrentGuess && props.move !== ""
             ? "text-darkAbsent border-lightAbsent dark:text-white"
             : guessResults[props.guessIndex].correctMoves.includes(props.index)
@@ -65,7 +65,7 @@ export default function GuessingArea() {
   const TileRowComponent = memo(
     (props: { list: string[]; guessIndex: number; guessLength: number }) => {
       return (
-        <div className="flex gap-x-2">
+        <div className="flex lg:gap-x-2 sm:gap-x-1 max-sm:gap-x-1">
           {props.list.map((move, index) => (
             <TileComponent
               move={move}
@@ -82,7 +82,7 @@ export default function GuessingArea() {
   );
 
   return (
-    <div className="flex flex-col gap-y-2 h-full">
+    <div className="flex flex-col lg:gap-y-2 sm:gap-y-1 max-sm:gap-y-1 h-full">
       {allGuesses.map((guess, index) => (
         <div key={index}>
           <TileRowComponent

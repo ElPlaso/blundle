@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         darkBackground: "#121212",
+        lightBackground: "#f0f3f3",
         darkAbsent: "#3a3a3c",
         lightAbsent: "#787c7e",
         lightSecondary: "#d3d6da",
