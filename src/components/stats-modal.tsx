@@ -7,6 +7,8 @@ import {
   IconButton,
   Slide,
   Snackbar,
+  SnackbarContent,
+  Portal,
 } from "@mui/material";
 import { BarChart, Close, Share } from "@mui/icons-material";
 import { useEffect, useState } from "react";
@@ -163,12 +165,25 @@ export default function StatsModal() {
           </DialogActions>
         </div>
       </Dialog>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={showSnackbar}
-        onClose={() => setShowSnackbar(false)}
-        message="Copied results to clipboard"
-      />
+      <Portal>
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={showSnackbar}
+          onClose={() => setShowSnackbar(false)}
+          autoHideDuration={2000}
+        >
+          <SnackbarContent
+            style={{
+              backgroundColor: "#538d4e",
+              color: "white",
+              fontWeight: "bold",
+              display: "flex",
+              justifyContent: "center",
+            }}
+            message="Copied results to clipboard!"
+          />
+        </Snackbar>
+      </Portal>
     </div>
   );
 }
