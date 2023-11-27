@@ -13,6 +13,22 @@ export default {
         lightPresent: "#c9b458",
         darkPresent: "#b59f3b",
       },
+      animation: {
+        "pulse-short": "pulseShort 0.5s ease-in-out 1",
+      },
+      keyframes: {
+        pulseShort: {
+          "0%": {
+            transform: "scale(1)",
+          },
+          "40%": {
+            transform: "scale(1.02)",
+          },
+          "100%": {
+            transform: "scale(1)",
+          },
+        },
+      },
     },
   },
   plugins: [],
