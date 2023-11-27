@@ -112,7 +112,7 @@ export default function StatsModal() {
         aria-labelledby="dialog"
         TransitionComponent={Transition}
       >
-        <div className="lg:w-[504px] flex flex-col items-center dark:bg-darkBackground">
+        <div className="md:w-[504px] max-sm:w-[238px] flex flex-col items-center dark:bg-darkBackground">
           <DialogTitle className="flex w-full justify-between items-center">
             <h2 className="text-xl font-bold dark:text-white">STATISTICS</h2>
             <IconButton onClick={toggleOpen} disableRipple>

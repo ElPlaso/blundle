@@ -38,10 +38,12 @@ export default function InfoModal() {
         TransitionComponent={Transition}
       >
         <div className="lg:w-[504px] flex flex-col items-center dark:bg-darkBackground">
-          <DialogTitle className="flex w-full justify-between items-center">
+          <DialogTitle className="flex w-full justify-between items-start">
             <div>
-              <h1 className="text-xl font-bold dark:text-white">How To Play</h1>
-              <h2 className="text-lightAbsent text-lg">
+              <h1 className="text-xl font-bold dark:text-white max-sm:text-lg pt-1.5">
+                How To Play
+              </h1>
+              <h2 className="text-lightAbsent text-lg max-sm:text-xs">
                 Solve the <b>Chess Puzzle</b> in 6 tries
               </h2>
             </div>
