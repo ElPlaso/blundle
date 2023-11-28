@@ -1,5 +1,6 @@
 import InfoModal from "./info-modal";
 import StatsModal from "./stats-modal";
+import ThemeToggle from "./theme-toggle";
 
 export default function TopAppBar() {
   return (
@@ -9,6 +10,7 @@ export default function TopAppBar() {
       <div className="flex-1 flex max-sm:flex-none items-center justify-center -space-x-4">
         <InfoModal />
         <StatsModal />
+        <ThemeToggle />
       </div>
     </header>
   );
