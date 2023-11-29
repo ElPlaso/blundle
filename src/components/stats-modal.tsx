@@ -10,7 +10,7 @@ import {
   SnackbarContent,
   Portal,
 } from "@mui/material";
-import { BarChart, Close, Share } from "@mui/icons-material";
+import { LeaderboardOutlined, Close, Share } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import React from "react";
 import { TransitionProps } from "@mui/material/transitions";
@@ -105,7 +105,10 @@ export default function StatsModal() {
   return (
     <div>
       <IconButton size="large" onClick={toggleOpen} disableRipple>
-        <BarChart fontSize="large" className="text-black dark:text-white" />
+        <LeaderboardOutlined
+          fontSize="large"
+          className="text-black dark:text-white"
+        />
       </IconButton>
       <Dialog
         fullScreen={false}

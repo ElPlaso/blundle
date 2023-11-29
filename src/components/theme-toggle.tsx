@@ -1,5 +1,5 @@
 import { IconButton } from "@mui/material";
-import { Brightness4 } from "@mui/icons-material";
+import { Brightness4Outlined } from "@mui/icons-material";
 import { useEffect } from "react";
 
 export default function ThemeToggle() {
@@ -23,7 +23,10 @@ export default function ThemeToggle() {
 
   return (
     <IconButton size="large" onClick={handleClick} disableRipple>
-      <Brightness4 fontSize="large" className="text-black dark:text-white" />
+      <Brightness4Outlined
+        fontSize="large"
+        className="text-black dark:text-white text-"
+      />
     </IconButton>
   );
 }
