@@ -37,7 +37,15 @@ export default function InfoModal() {
         aria-labelledby="dialog"
         TransitionComponent={Transition}
       >
-        <div className="lg:w-[504px] flex flex-col items-center dark:bg-darkBackground">
+        <div className="lg:w-[504px] flex flex-col items-center">
+          <style>
+            {`
+            .MuiPaper-root { 
+              background-color: ${
+                localStorage.theme === "light" ? "white" : "#121212"
+              };
+            `}
+          </style>
           <DialogTitle className="flex w-full justify-between items-start">
             <div>
               <h1 className="text-xl font-bold dark:text-white max-sm:text-lg pt-1.5">
