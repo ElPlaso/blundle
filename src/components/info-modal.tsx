@@ -27,7 +27,7 @@ export default function InfoModal() {
 
   return (
     <div>
-      <IconButton size="large" onClick={toggleOpen} disableRipple>
+      <IconButton size="small" onClick={toggleOpen} disableRipple>
         <HelpOutline fontSize="large" className="text-black dark:text-white" />
       </IconButton>
       <Dialog

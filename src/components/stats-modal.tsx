@@ -112,7 +112,7 @@ export default function StatsModal() {
           } !important;
         `}
       </style>
-      <IconButton size="large" onClick={toggleOpen} disableRipple>
+      <IconButton size="small" onClick={toggleOpen} disableRipple>
         <LeaderboardOutlined
           fontSize="large"
           className="text-black dark:text-white"
