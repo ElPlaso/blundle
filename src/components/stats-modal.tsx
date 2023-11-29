@@ -10,7 +10,7 @@ import {
   SnackbarContent,
   Portal,
 } from "@mui/material";
-import { LeaderboardOutlined, Close, Share } from "@mui/icons-material";
+import { LeaderboardOutlined, Close, ShareOutlined } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import React from "react";
 import { TransitionProps } from "@mui/material/transitions";
@@ -109,7 +109,7 @@ export default function StatsModal() {
         .MuiPaper-root { 
           background-color: ${
             localStorage.theme === "light" ? "#f0f3f3" : "#121212"
-          } !important;
+          };
         `}
       </style>
       <IconButton size="small" onClick={toggleOpen} disableRipple>
@@ -128,7 +128,7 @@ export default function StatsModal() {
           color: localStorage.theme == "light" ? "#f5f5f5" : "#212121",
         }}
       >
-        <div className="md:w-[504px] max-sm:w-[238px] flex flex-col items-center">
+        <div className="md:w-[504px] max-sm:w-[238px] flex flex-col items-center mb-4">
           <DialogTitle className="flex w-full justify-between items-center">
             <h2 className="text-xl font-bold dark:text-white">STATISTICS</h2>
             <IconButton onClick={toggleOpen} disableRipple>
@@ -170,11 +170,11 @@ export default function StatsModal() {
           <DialogActions>
             <button
               onClick={handleShare}
-              className="flex gap-x-4 bg-lightCorrect dark:bg-darkCorrect rounded px-4 py-2 shadow cursor-pointer text-white disabled:bg-opacity-50 disabled:cursor-not-allowed mb-4"
               disabled={!isSolved && !isLost}
+              className="flex text-center font-bold text-sm justify-center gap-x-2 py-2 w-48 text-white bg-lightCorrect dark:bg-darkCorrect rounded-full"
             >
               Share
-              <Share />
+              <ShareOutlined />
             </button>
           </DialogActions>
         </div>
@@ -188,7 +188,8 @@ export default function StatsModal() {
         >
           <SnackbarContent
             style={{
-              backgroundColor: "#538d4e",
+              backgroundColor:
+                localStorage.theme === "light" ? "#6aaa64" : "#538d4e",
               color: "white",
               fontWeight: "bold",
               display: "flex",
