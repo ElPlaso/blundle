@@ -104,6 +104,14 @@ export default function StatsModal() {
 
   return (
     <div>
+      <style>
+        {`
+        .MuiPaper-root { 
+          background-color: ${
+            localStorage.theme === "light" ? "#f0f3f3" : "#121212"
+          } !important;
+        `}
+      </style>
       <IconButton size="large" onClick={toggleOpen} disableRipple>
         <LeaderboardOutlined
           fontSize="large"
@@ -116,8 +124,11 @@ export default function StatsModal() {
         onClose={toggleOpen}
         aria-labelledby="dialog"
         TransitionComponent={Transition}
+        style={{
+          color: localStorage.theme == "light" ? "#f5f5f5" : "#212121",
+        }}
       >
-        <div className="md:w-[504px] max-sm:w-[238px] flex flex-col items-center dark:bg-darkBackground">
+        <div className="md:w-[504px] max-sm:w-[238px] flex flex-col items-center">
           <DialogTitle className="flex w-full justify-between items-center">
             <h2 className="text-xl font-bold dark:text-white">STATISTICS</h2>
             <IconButton onClick={toggleOpen} disableRipple>
