@@ -86,12 +86,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     async function fetchPuzzle() {
-      const url = "https://lichess.org/api/puzzle/daily";
+      const url = "https://blundle-daily.onrender.com/puzzle";
       const response = await fetch(url);
       const puzzle = await response.json();
 
-      const loadedGame = new Chess();
-      loadedGame.loadPgn(puzzle.game.pgn);
+      const loadedGame = new Chess(puzzle.fen);
+      loadedGame.move(puzzle.moves[0]);
 
       position.current = loadedGame.fen();
       setToWin(loadedGame.turn() === "w" ? "White" : "Black");
@@ -100,13 +100,13 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       const solutionGame = new Chess(position.current);
       const loadedSolution = [];
 
-      const solutionLength = puzzle.puzzle.solution.length;
+      const solutionLength = puzzle.moves.length - 1;
 
       numberOfMovesPerGuess.current = solutionLength;
 
       const currentSetGame: SavedGame = getCurrentGame();
 
-      if (currentSetGame?.id === puzzle.game.id) {
+      if (currentSetGame?.id === puzzle.puzzleid) {
         const reloadedGame = new Chess(loadedGame.fen());
 
         for (let i = 0; i < currentSetGame.currentGuess.length; i++) {
@@ -141,7 +141,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         setAllGuesses(prefilledAllGuesses);
 
         for (let i = 0; i < solutionLength; i++) {
-          const move = puzzle.puzzle.solution[i];
+          const move = puzzle.moves[i + 1];
           // get potential promotion
           const promotion = solutionLength === 5 ? move.slice(4, 5) : "q";
           const moveObject = {
@@ -158,7 +158,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         solution.current = loadedSolution;
 
         setCurrentGame({
-          id: puzzle.game.id,
+          id: puzzle.puzzleid,
           fen: position.current,
           solution: solution.current,
           currentGuess: prefilledCurrentGuessMoves,
