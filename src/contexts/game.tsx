@@ -24,7 +24,11 @@ interface GameContextType {
   makeGuessMove: (guessMove: string) => void;
   removeLastGuessMove: () => void;
   submitGuess: () => void;
-  onDrop: (sourceSquare: string, targetSquare: string) => boolean;
+  onDrop: (
+    sourceSquare: string,
+    targetSquare: string,
+    promotion?: string
+  ) => boolean;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -64,7 +68,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     return result;
   }
 
-  function onDrop(sourceSquare: string, targetSquare: string) {
+  function onDrop(
+    sourceSquare: string,
+    targetSquare: string,
+    promotionPiece?: string
+  ) {
     if (
       isSolved ||
       currentGuessMoves!.findIndex((move) => move === "") === -1
@@ -75,7 +83,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     const move = makeAMove({
       from: sourceSquare,
       to: targetSquare,
-      promotion: "q", // TODO: handle user promtion selection
+      promotion: promotionPiece || "q",
     });
 
     if (move === null) return false;
