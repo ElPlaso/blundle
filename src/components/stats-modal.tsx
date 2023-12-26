@@ -1,34 +1,19 @@
 import {
-  Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
-  IconButton,
-  Slide,
   Snackbar,
   SnackbarContent,
   Portal,
 } from "@mui/material";
-import { LeaderboardOutlined, Close, ShareOutlined } from "@mui/icons-material";
-import { useEffect, useState } from "react";
-import React from "react";
-import { TransitionProps } from "@mui/material/transitions";
+import { LeaderboardOutlined, ShareOutlined } from "@mui/icons-material";
+import { useMemo, useState } from "react";
 import { useGameContext } from "../contexts/game";
 import { getGameHistory } from "../lib/history";
 import { SavedGame } from "../lib/types";
-
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement;
-  },
-  ref: React.Ref<unknown>
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import Modal from "./shared/Modal";
 
 export default function StatsModal() {
-  const [open, setOpen] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
 
   const {
@@ -39,8 +24,6 @@ export default function StatsModal() {
     numberOfSubmissions,
     getSolution,
   } = useGameContext();
-
-  const toggleOpen = () => setOpen((prev) => !prev);
 
   const handleShare = () => {
     let shareString = "";
@@ -81,11 +64,7 @@ export default function StatsModal() {
     setShowSnackbar(true);
   };
 
-  useEffect(() => {
-    if (isSolved || isLost) {
-      setOpen(true);
-    }
-  }, [isSolved, isLost]);
+  const isOpen = useMemo(() => isSolved || isLost, [isSolved, isLost]);
 
   const history: SavedGame[] = getGameHistory();
 
@@ -103,82 +82,60 @@ export default function StatsModal() {
     ) || null;
 
   return (
-    <div>
-      <IconButton size="small" onClick={toggleOpen} disableRipple>
-        <LeaderboardOutlined
-          fontSize="large"
-          className="text-black dark:text-white"
-        />
-      </IconButton>
-      <Dialog
-        fullScreen={false}
-        open={open}
-        onClose={toggleOpen}
-        aria-labelledby="dialog"
-        TransitionComponent={Transition}
-        style={{
-          color: localStorage.theme == "light" ? "white" : "#212121",
-        }}
+    <>
+      <Modal
+        icon={
+          <LeaderboardOutlined
+            fontSize="large"
+            className="text-black dark:text-white"
+          />
+        }
+        title="STATISTICS"
+        isOpen={isOpen}
       >
-        <style>
-          {`
-            .MuiPaper-root { 
-              background-color: ${
-                localStorage.theme === "light" ? "#f0f3f3" : "#121212"
-              };
-            `}
-        </style>
-        <div className="md:w-[504px] max-sm:w-[238px] flex flex-col items-center mb-4">
-          <DialogTitle className="flex w-full justify-between items-center">
-            <h2 className="text-xl font-bold dark:text-white">STATISTICS</h2>
-            <IconButton onClick={toggleOpen} disableRipple>
-              <Close className="text-black dark:text-white" />
-            </IconButton>
-          </DialogTitle>
-          <DialogContent className="flex flex-col w-full gap-y-8">
-            <DialogContentText className="flex w-full justify-between">
-              <div className="flex flex-col items-center text-black dark:text-white">
-                <span className="text-3xl font-semi-bold">
-                  {numberOfGamesPlayed}
-                </span>
-                Played
-              </div>
-              <div className="flex flex-col items-center text-black dark:text-white">
-                <span className="text-3xl font-semi-bold">
-                  {winPercentage ?? "0"}
-                </span>
-                Win %{" "}
-              </div>
-              <div className="flex flex-col items-center text-black dark:text-white">
-                <span className="text-3xl font-semi-bold">
-                  {averageNumberOfGuesses ?? "0"}
-                </span>
-                Average
-              </div>
-            </DialogContentText>
-            <DialogContentText className="flex flex-col justify-center items-center gap-y-2">
-              <h2 className="text-3xl font-bold text-black dark:text-white">
-                {isSolved ? "You win!" : isLost ? "You lose!" : "Playing..."}
-              </h2>
-              {(isSolved || isLost) && (
-                <div className="text-lightAbsent">
-                  Solution: {getSolution().join(" ")}
-                </div>
-              )}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <button
-              onClick={handleShare}
-              disabled={!isSolved && !isLost}
-              className="flex text-center font-bold text-sm justify-center gap-x-2 py-2 w-48 text-white bg-lightCorrect dark:bg-darkCorrect rounded-full"
-            >
-              Share
-              <ShareOutlined />
-            </button>
-          </DialogActions>
-        </div>
-      </Dialog>
+        <DialogContent className="flex flex-col w-full gap-y-8">
+          <DialogContentText className="flex w-full justify-between">
+            <span className="flex flex-col items-center text-black dark:text-white">
+              <span className="text-3xl font-semi-bold">
+                {numberOfGamesPlayed}
+              </span>
+              Played
+            </span>
+            <span className="flex flex-col items-center text-black dark:text-white">
+              <span className="text-3xl font-semi-bold">
+                {winPercentage ?? "0"}
+              </span>
+              Win %{" "}
+            </span>
+            <span className="flex flex-col items-center text-black dark:text-white">
+              <span className="text-3xl font-semi-bold">
+                {averageNumberOfGuesses ?? "0"}
+              </span>
+              Average
+            </span>
+          </DialogContentText>
+          <DialogContentText className="flex flex-col justify-center items-center gap-y-2">
+            <span className="text-3xl font-bold text-black dark:text-white">
+              {isSolved ? "You win!" : isLost ? "You lose!" : "Playing..."}
+            </span>
+            {(isSolved || isLost) && (
+              <span className="text-lightAbsent">
+                Solution: {getSolution().join(" ")}
+              </span>
+            )}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <button
+            onClick={handleShare}
+            disabled={!isSolved && !isLost}
+            className="flex text-center font-bold text-sm justify-center gap-x-2 py-2 w-48 text-white bg-lightCorrect dark:bg-darkCorrect rounded-full"
+          >
+            Share
+            <ShareOutlined />
+          </button>
+        </DialogActions>
+      </Modal>
       <Portal>
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
@@ -199,6 +156,6 @@ export default function StatsModal() {
           />
         </Snackbar>
       </Portal>
-    </div>
+    </>
   );
 }
