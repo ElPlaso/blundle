@@ -1,4 +1,4 @@
-import InfoModal from "./info-modal";
+import InfoModal from "./info_modal/info-modal";
 import StatsModal from "./stats-modal";
 import ThemeToggle from "./theme-toggle";
 
