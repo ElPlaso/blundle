@@ -2,13 +2,13 @@ import { ShareOutlined } from "@mui/icons-material";
 import { Portal } from "@mui/material";
 import { useState } from "react";
 import { useGameContext } from "../../contexts/game";
-import ShareToast from "./share-toast";
+import Toast from "../shared/Toast";
 
 export default function Share() {
   const { isSolved, isLost, guessResults, allGuesses, numberOfSubmissions } =
     useGameContext();
 
-  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const handleShare = () => {
     let shareString = "";
@@ -45,7 +45,7 @@ export default function Share() {
 
     navigator.clipboard.writeText(shareString);
 
-    setShowSnackbar(true);
+    setShowToast(true);
   };
 
   return (
@@ -60,10 +60,11 @@ export default function Share() {
       </button>
 
       <Portal>
-        <ShareToast
-          isOpen={showSnackbar}
+        <Toast
+          message={"Copied results to clipboard!"}
+          isOpen={showToast}
           onClose={() => {
-            setShowSnackbar(false);
+            setShowToast(false);
           }}
         />
       </Portal>

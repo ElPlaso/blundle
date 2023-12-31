@@ -1,5 +1,5 @@
 import "./App.css";
-import Actions from "./components/actions";
+import Actions from "./components/actions/actions";
 import ChessBoard from "./components/chess-board";
 import GuessingArea from "./components/guessing-area";
 import Subheading from "./components/subheading";
