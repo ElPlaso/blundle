@@ -1,5 +1,5 @@
 import InfoModal from "./info_modal/info-modal";
-import StatsModal from "./stats-modal";
+import StatsModal from "./stats_modal/stats-modal";
 import ThemeToggle from "./theme-toggle";
 
 export default function TopAppBar() {
