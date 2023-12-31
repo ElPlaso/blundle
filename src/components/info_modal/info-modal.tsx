@@ -29,6 +29,7 @@ export default function InfoModal() {
         </span>
         <span className="text-lightAbsent text-sm flex flex-col">
           <ul className="list-disc ml-4 gap-y-2 flex flex-col">
+            <li>Click to move pieces</li>
             <li>Find the best moves (including opponent moves)</li>
             <li>Each move must be a legal move in the position</li>
             <li>

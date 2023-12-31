@@ -35,9 +35,13 @@ export default function ChessBoard() {
       };
       return move;
     });
-    newSquares[square] = {
-      background: "rgba(255, 255, 0, 0.4)",
-    };
+
+    // piece in square
+    if (game.get(square)) {
+      newSquares[square] = {
+        background: "rgba(255, 255, 0, 0.4)",
+      };
+    }
     setOptionSquares(newSquares);
     return true;
   }
