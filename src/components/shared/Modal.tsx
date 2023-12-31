@@ -36,7 +36,7 @@ export default function Modal(props: ModalProps) {
         size="small"
         onClick={toggleOpen}
         disableRipple
-        className="focus:ring-2"
+        className="focus:ring-2 focus:ring-black dark:focus:ring-white"
       >
         {icon}
       </IconButton>
