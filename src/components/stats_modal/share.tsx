@@ -1,7 +1,8 @@
 import { ShareOutlined } from "@mui/icons-material";
-import { Portal, Snackbar, SnackbarContent } from "@mui/material";
+import { Portal } from "@mui/material";
 import { useState } from "react";
 import { useGameContext } from "../../contexts/game";
+import ShareToast from "./share-toast";
 
 export default function Share() {
   const { isSolved, isLost, guessResults, allGuesses, numberOfSubmissions } =
@@ -59,24 +60,12 @@ export default function Share() {
       </button>
 
       <Portal>
-        <Snackbar
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          open={showSnackbar}
-          onClose={() => setShowSnackbar(false)}
-          autoHideDuration={2000}
-        >
-          <SnackbarContent
-            style={{
-              backgroundColor:
-                localStorage.theme === "light" ? "#6aaa64" : "#538d4e",
-              color: "white",
-              fontWeight: "bold",
-              display: "flex",
-              justifyContent: "center",
-            }}
-            message="Copied results to clipboard!"
-          />
-        </Snackbar>
+        <ShareToast
+          isOpen={showSnackbar}
+          onClose={() => {
+            setShowSnackbar(false);
+          }}
+        />
       </Portal>
     </>
   );
