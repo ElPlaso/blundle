@@ -1,6 +1,6 @@
 import { DialogActions, DialogContent, DialogContentText } from "@mui/material";
 import { LeaderboardOutlined } from "@mui/icons-material";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useGameContext } from "../../contexts/game";
 import { getGameHistory } from "../../lib/history";
 import { SavedGame } from "../../lib/types";
@@ -9,8 +9,13 @@ import Share from "./share";
 
 export default function StatsModal() {
   const { isSolved, isLost, getSolution } = useGameContext();
+  const [isOpen, setIsOpen] = useState(false);
 
-  const isOpen = useMemo(() => isSolved || isLost, [isSolved, isLost]);
+  useEffect(() => {
+    if (isSolved || isLost) {
+      setIsOpen(true);
+    }
+  }, [isSolved, isLost, setIsOpen]);
 
   const history: SavedGame[] = getGameHistory();
 
