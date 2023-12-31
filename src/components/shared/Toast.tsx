@@ -1,6 +1,7 @@
 import { SnackbarContent, Snackbar } from "@mui/material";
 
 export interface ShareToastProps {
+  message: string;
   isOpen: boolean;
   onClose?: () => void;
 }
@@ -14,7 +15,7 @@ const toastStyles = {
 };
 
 export default function ShareToast(props: ShareToastProps) {
-  const { isOpen, onClose } = props;
+  const { message, isOpen, onClose } = props;
 
   return (
     <Snackbar
@@ -23,10 +24,7 @@ export default function ShareToast(props: ShareToastProps) {
       onClose={onClose}
       autoHideDuration={1000}
     >
-      <SnackbarContent
-        style={toastStyles}
-        message="Copied results to clipboard!"
-      />
+      <SnackbarContent style={toastStyles} message={message} />
     </Snackbar>
   );
 }
