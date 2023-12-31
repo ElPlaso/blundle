@@ -65,7 +65,10 @@ export default function GuessingArea() {
   const TileRowComponent = memo(
     (props: { list: string[]; guessIndex: number; guessLength: number }) => {
       return (
-        <div className="flex lg:gap-x-2 sm:gap-x-1 max-sm:gap-x-1">
+        <div
+          id={props.guessIndex === numberOfSubmissions ? "current-guess" : ""}
+          className="flex lg:gap-x-2 sm:gap-x-1 max-sm:gap-x-1"
+        >
           {props.list.map((move, index) => (
             <TileComponent
               move={move}

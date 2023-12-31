@@ -7,11 +7,23 @@ export default function Submit() {
   const { submitGuess, currentGuessMoves, isSolved, isLost } = useGameContext();
   const [showToast, setShowToast] = useState(false);
 
+  const [animating, setAnimating] = useState(false);
+
   const handleEnter = () => {
+    if (animating) return;
     if (!currentGuessMoves.includes("")) {
       submitGuess();
     } else if (!isSolved && !isLost) {
       setShowToast(true);
+      // add animation
+      setAnimating(true);
+      document.getElementById("current-guess")?.classList.add("animate-shake");
+      setTimeout(() => {
+        document
+          .getElementById("current-guess")
+          ?.classList.remove("animate-shake");
+        setAnimating(false);
+      }, 1000);
     }
   };
 
