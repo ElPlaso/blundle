@@ -22,7 +22,12 @@ export default function ThemeToggle() {
   }
 
   return (
-    <IconButton size="small" onClick={handleClick} disableRipple>
+    <IconButton
+      size="small"
+      onClick={handleClick}
+      disableRipple
+      className="focus:ring-2"
+    >
       <Brightness4Outlined
         fontSize="large"
         className="text-black dark:text-white text-"
