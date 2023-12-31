@@ -32,7 +32,12 @@ export default function Modal(props: ModalProps) {
 
   return (
     <div>
-      <IconButton size="small" onClick={toggleOpen} disableRipple>
+      <IconButton
+        size="small"
+        onClick={toggleOpen}
+        disableRipple
+        className="focus:ring-2"
+      >
         {icon}
       </IconButton>
       <Dialog
