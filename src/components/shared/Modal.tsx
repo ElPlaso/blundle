@@ -32,7 +32,12 @@ export default function Modal(props: ModalProps) {
 
   return (
     <div>
-      <IconButton size="small" onClick={toggleOpen} disableRipple>
+      <IconButton
+        size="small"
+        onClick={toggleOpen}
+        disableRipple
+        className="focus:ring-2 focus:ring-black dark:focus:ring-white"
+      >
         {icon}
       </IconButton>
       <Dialog
@@ -56,7 +61,11 @@ export default function Modal(props: ModalProps) {
         <div className="md:w-[504px] max-sm:w-[238px] flex flex-col items-center mb-4">
           <DialogTitle className="flex w-full justify-between items-center">
             <span className="text-xl font-bold dark:text-white">{title}</span>
-            <IconButton onClick={toggleOpen} disableRipple>
+            <IconButton
+              onClick={toggleOpen}
+              disableRipple
+              className="focus:ring-2 focus:ring-black dark:focus:ring-white"
+            >
               <Close className="text-black dark:text-white" />
             </IconButton>
           </DialogTitle>
