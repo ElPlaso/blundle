@@ -2,14 +2,26 @@ import { DialogContent, DialogContentText } from "@mui/material";
 import { HelpOutline } from "@mui/icons-material";
 import Modal from "../shared/Modal";
 import ResultExample from "./result-example";
+import { useEffect, useState } from "react";
+import { useGameContext } from "../../contexts/game";
 
 export default function InfoModal() {
+  const [isOpen, setIsOpen] = useState(false);
+  const { isSolved, isLost, currentPosition } = useGameContext();
+
+  useEffect(() => {
+    if (!isSolved && !isLost && currentPosition) {
+      setIsOpen(true);
+    }
+  }, [isSolved, isLost, currentPosition, setIsOpen]);
+
   return (
     <Modal
       icon={
         <HelpOutline fontSize="large" className="text-black dark:text-white" />
       }
       title="How To Play"
+      isOpen={isOpen}
     >
       <DialogContent className="flex flex-col w-full gap-y-4">
         <span className="text-sm text-lightAbsent dark:text-white">
