@@ -274,8 +274,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     const incorrectButIncludedMoves: number[] = [];
 
     currentGuessMoves.forEach((move, index) => {
-      console.log(move, solution.current[index]);
-      if (move === solution.current[index]) {
+      // allow any checkmate if rest of sequence is correct
+      if (
+        move === solution.current[index] ||
+        (move.includes("#") &&
+          correctMoves.length === numberOfMovesPerGuess.current - 1)
+      ) {
         correctMoves.push(index);
       } else if (solution.current.includes(move)) {
         incorrectButIncludedMoves.push(index);
