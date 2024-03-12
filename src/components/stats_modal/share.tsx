@@ -14,9 +14,9 @@ export default function Share() {
     let shareString = "";
 
     if (isLost) {
-      shareString += "I blundered today's chess puzzle! \n";
+      shareString += "I blundered today's blundle! \n";
     } else if (isSolved) {
-      shareString += `I solved today's chess puzzle in ${numberOfSubmissions} ${
+      shareString += `I solved today's blundle in ${numberOfSubmissions} ${
         numberOfSubmissions > 1 ? "tries" : "try"
       }! \n`;
     }
@@ -41,7 +41,7 @@ export default function Share() {
 
     shareString += `${emojiString}`;
 
-    shareString += "#blundle #dailychesspuzzle";
+    shareString += "#blundle https://blundle.online";
 
     navigator.clipboard.writeText(shareString);
 
@@ -53,7 +53,7 @@ export default function Share() {
       <button
         onClick={handleShare}
         disabled={!isSolved && !isLost}
-        className="disabled:cursor-not-allowed dark:disabled:bg-darkAbsent disabled:bg-lightAbsent flex text-center font-bold text-sm justify-center gap-x-2 py-2 w-48 text-white enabled:bg-lightCorrect enabled:dark:bg-darkCorrect hover: rounded-full"
+        className="flex justify-center w-48 py-2 text-sm font-bold text-center text-white rounded-full disabled:cursor-not-allowed dark:disabled:bg-darkAbsent disabled:bg-lightAbsent gap-x-2 enabled:bg-lightCorrect enabled:dark:bg-darkCorrect hover:"
       >
         Share
         <ShareOutlined />
