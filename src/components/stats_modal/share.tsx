@@ -1,7 +1,7 @@
 import { ShareOutlined } from "@mui/icons-material";
 import { Portal } from "@mui/material";
 import { useState } from "react";
-import { useGameContext } from "../../contexts/game";
+import { useGameContext } from "../../contexts/utils";
 import Toast from "../shared/Toast";
 
 export default function Share() {

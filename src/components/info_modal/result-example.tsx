@@ -16,7 +16,7 @@ export default function ResultExample(props: ResultExampleProps) {
   };
 
   return (
-    <span className="text-lightAbsent flex flex-col gap-y-1">
+    <span className="flex flex-col text-lightAbsent gap-y-1">
       <span className="flex text-white gap-x-2">
         {moves.map((move, index) => (
           <span

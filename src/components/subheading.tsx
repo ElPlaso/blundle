@@ -1,4 +1,4 @@
-import { useGameContext } from "../contexts/game";
+import { useGameContext } from "../contexts/utils";
 import { CircularProgress } from "@mui/material";
 
 export default function Subheading() {
@@ -12,6 +12,6 @@ export default function Subheading() {
     );
 
   return (
-    <h3 className="text-xl text-lightAbsent font-bold">{toWin} to play</h3>
+    <h3 className="text-xl font-bold text-lightAbsent">{toWin} to play</h3>
   );
 }

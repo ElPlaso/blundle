@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Chess } from "chess.js";
 import {
   getCurrentGame,
@@ -7,39 +7,11 @@ import {
   setCurrentGame,
 } from "../lib/history";
 import { GuessResults, SavedGame } from "../lib/types";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const GameContext = createContext<GameContextType>(null as any);
-
-interface GameContextType {
-  currentPosition: string | null;
-  numberOfSubmissions: number;
-  isSolved: boolean;
-  isLost: boolean;
-  toWin: "White" | "Black";
-  currentGuessMoves: string[];
-  allGuesses: string[][];
-  guessResults: GuessResults[];
-  getSolution: () => string[];
-  makeGuessMove: (guessMove: string) => void;
-  removeLastGuessMove: () => void;
-  submitGuess: () => void;
-  onDrop: (
-    sourceSquare: string,
-    targetSquare: string,
-    promotion?: string
-  ) => boolean;
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export function useGameContext() {
-  return useContext(GameContext);
-}
+import { GameContext } from "./utils";
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const MAX_GUESSES = 6;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [currentGuessMoves, setCurrentGuessMoves] = useState<string[]>([]);
   const [allGuesses, setAllGuesses] = useState<string[][]>([]);
 
@@ -181,8 +153,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
 
     fetchPuzzle();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [guessResults, isLost, isSolved, numberOfSubmissions]);
 
   useEffect(() => {
     const gameToUpdate: SavedGame = getCurrentGame();
@@ -209,9 +180,15 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         }
       }
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPosition, guessResults, isSolved, isLost]);
+  }, [
+    currentPosition,
+    guessResults,
+    isSolved,
+    isLost,
+    currentGuessMoves,
+    allGuesses,
+    numberOfSubmissions,
+  ]);
 
   const makeGuessMove = (guessMove: string) => {
     const currentGuessMovesCopy = [...currentGuessMoves!];

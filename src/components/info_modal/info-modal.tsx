@@ -3,7 +3,7 @@ import { HelpOutline } from "@mui/icons-material";
 import Modal from "../shared/Modal";
 import ResultExample from "./result-example";
 import { useEffect, useState } from "react";
-import { useGameContext } from "../../contexts/game";
+import { useGameContext } from "../../contexts/utils";
 
 export default function InfoModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,8 +27,8 @@ export default function InfoModal() {
         <span className="text-sm text-lightAbsent dark:text-white">
           Solve the <b>Chess Puzzle</b> in 6 tries
         </span>
-        <span className="text-lightAbsent text-sm flex flex-col">
-          <ul className="list-disc ml-4 gap-y-2 flex flex-col">
+        <span className="flex flex-col text-sm text-lightAbsent">
+          <ul className="flex flex-col ml-4 list-disc gap-y-2">
             <li>Click to move pieces</li>
             <li>Find the best moves (including opponent moves)</li>
             <li>Each move must be a legal move in the position</li>
@@ -51,7 +51,7 @@ export default function InfoModal() {
         </span>
         <DialogContentText className="flex flex-col gap-y-2">
           <span className="font-bold text-black dark:text-white">Examples</span>
-          <span className="text-lightAbsent flex flex-col gap-y-2 text-sm">
+          <span className="flex flex-col text-sm text-lightAbsent gap-y-2">
             <ResultExample
               moves={["e4", "e5", "Nf3"]}
               type="Correct"
@@ -70,7 +70,7 @@ export default function InfoModal() {
           </span>
         </DialogContentText>
         <DialogContentText className="flex flex-col gap-y-2">
-          <span className="text-lightAbsent flex flex-col border-t pt-4 dark:border-darkAbsent text-sm">
+          <span className="flex flex-col pt-4 text-sm border-t text-lightAbsent dark:border-darkAbsent">
             There is a new puzzle daily courtesy of
             <a
               target="_blank"

@@ -1,7 +1,7 @@
 import { DialogActions, DialogContent, DialogContentText } from "@mui/material";
 import { LeaderboardOutlined } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { useGameContext } from "../../contexts/game";
+import { useGameContext } from "../../contexts/utils";
 import Modal from "./../shared/Modal";
 import Share from "./share";
 import Stats from "./stats";
@@ -30,10 +30,10 @@ export default function StatsModal() {
         isOpen={isOpen}
       >
         <DialogContent className="flex flex-col w-full gap-y-8">
-          <DialogContentText className="flex w-full justify-between">
+          <DialogContentText className="flex justify-between w-full">
             <Stats />
           </DialogContentText>
-          <DialogContentText className="flex flex-col justify-center items-center gap-y-2">
+          <DialogContentText className="flex flex-col items-center justify-center gap-y-2">
             <StatsSubheading />
           </DialogContentText>
         </DialogContent>

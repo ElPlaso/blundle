@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from "react";
-import { useGameContext } from "../contexts/game";
+import { useGameContext } from "../contexts/utils";
 
 export default function GuessingArea() {
   const { currentGuessMoves, numberOfSubmissions, allGuesses, guessResults } =
@@ -85,7 +85,7 @@ export default function GuessingArea() {
   );
 
   return (
-    <div className="flex flex-col lg:gap-y-2 sm:gap-y-1 max-sm:gap-y-1 h-full">
+    <div className="flex flex-col h-full lg:gap-y-2 sm:gap-y-1 max-sm:gap-y-1">
       {allGuesses.map((guess, index) => (
         <div key={index}>
           <TileRowComponent

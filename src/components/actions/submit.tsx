@@ -1,7 +1,7 @@
 import { Portal } from "@mui/material";
-import { useGameContext } from "../../contexts/game";
 import { useState } from "react";
 import Toast from "../shared/Toast";
+import { useGameContext } from "../../contexts/utils";
 
 export default function Submit() {
   const { submitGuess, currentGuessMoves, isSolved, isLost } = useGameContext();
@@ -30,7 +30,7 @@ export default function Submit() {
   return (
     <>
       <button
-        className="text-white bg-lightCorrect dark:bg-darkCorrect rounded px-4 py-2 shadow cursor-pointer font-semibold disabled:bg-opacity-50 disabled:cursor-not-allowed"
+        className="px-4 py-2 font-semibold text-white rounded shadow cursor-pointer bg-lightCorrect dark:bg-darkCorrect disabled:bg-opacity-50 disabled:cursor-not-allowed"
         onClick={handleEnter}
       >
         Enter

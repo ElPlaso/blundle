@@ -1,5 +1,5 @@
 import { Chessboard } from "react-chessboard";
-import { useGameContext } from "../contexts/game";
+import { useGameContext } from "../contexts/utils";
 import { useState } from "react";
 import { Chess, Move, Square } from "chess.js";
 import { PromotionPieceOption } from "react-chessboard/dist/chessboard/types";

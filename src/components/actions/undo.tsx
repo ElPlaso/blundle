@@ -1,4 +1,4 @@
-import { useGameContext } from "../../contexts/game";
+import { useGameContext } from "../../contexts/utils";
 
 export default function Undo() {
   const { removeLastGuessMove } = useGameContext();
@@ -9,7 +9,7 @@ export default function Undo() {
 
   return (
     <button
-      className="text-white bg-lightAbsent dark:bg-darkAbsent rounded px-4 py-2 shadow cursor-pointer font-semibold disabled:bg-opacity-50 disabled:cursor-not-allowed"
+      className="px-4 py-2 font-semibold text-white rounded shadow cursor-pointer bg-lightAbsent dark:bg-darkAbsent disabled:bg-opacity-50 disabled:cursor-not-allowed"
       onClick={handleUndo}
     >
       Undo

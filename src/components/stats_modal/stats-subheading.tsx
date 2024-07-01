@@ -1,4 +1,4 @@
-import { useGameContext } from "../../contexts/game";
+import { useGameContext } from "../../contexts/utils";
 
 export default function StatsSubheading() {
   const { isSolved, isLost, getSolution } = useGameContext();
