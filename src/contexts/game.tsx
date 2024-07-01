@@ -47,6 +47,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   ) {
     if (
       isSolved ||
+      isLost ||
       currentGuessMoves!.findIndex((move) => move === "") === -1
     ) {
       return false;
