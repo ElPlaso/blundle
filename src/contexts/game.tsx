@@ -7,7 +7,7 @@ import {
   setCurrentGame,
 } from "../lib/history";
 import { GuessResults, SavedGame } from "../lib/types";
-import { GameContext } from "./utils";
+import { compareGuessToSolution, GameContext } from "./utils";
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const MAX_GUESSES = 6;
@@ -218,7 +218,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       return previous;
     });
     setNumberOfSubmissions((previous) => previous + 1);
-    const result = compareGuessToSolution();
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution.current,
+      numberOfMovesPerGuess.current
+    );
     setGuessResults((previous) => {
       previous[numberOfSubmissions] = result;
       return previous;
@@ -243,28 +247,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const getSolution = () => {
     return solution.current;
-  };
-
-  // return indexes of guess moves that are in the correct position
-  // as well as indexes of guess moves that are in the solution but in the wrong position
-  const compareGuessToSolution = () => {
-    const correctMoves: number[] = [];
-    const incorrectButIncludedMoves: number[] = [];
-
-    currentGuessMoves.forEach((move, index) => {
-      // allow any checkmate if rest of sequence is correct
-      if (
-        move === solution.current[index] ||
-        (move.includes("#") &&
-          correctMoves.length === numberOfMovesPerGuess.current - 1)
-      ) {
-        correctMoves.push(index);
-      } else if (solution.current.includes(move)) {
-        incorrectButIncludedMoves.push(index);
-      }
-    });
-
-    return { correctMoves, incorrectButIncludedMoves };
   };
 
   const value = {
