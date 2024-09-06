@@ -1,7 +1,7 @@
 import "./App.css";
 import Actions from "./components/actions/actions";
 import ChessBoard from "./components/chess-board";
-import GuessingArea from "./components/guessing-area";
+import GuessingArea from "./components/guessing_area/guessing-area";
 import Subheading from "./components/subheading";
 import TopAppBar from "./components/top-app-bar";
 import { GameProvider } from "./contexts/game";
