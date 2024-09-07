@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import { GameContextType } from "../lib/types";
 
-export const GameContext = createContext<GameContextType>({
+export const intitialGameState: GameContextType = {
     currentPosition: null,
     numberOfSubmissions: 0,
     isSolved: false,
@@ -15,7 +15,9 @@ export const GameContext = createContext<GameContextType>({
     removeLastGuessMove: () => { },
     submitGuess: () => { },
     onDrop: () => false,
-});
+}
+
+export const GameContext = createContext<GameContextType>(intitialGameState);
 
 export function useGameContext() {
     return useContext(GameContext);
