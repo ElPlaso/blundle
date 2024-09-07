@@ -44,3 +44,14 @@ export function compareGuessToSolution(currentGuessMoves: string[], solution: st
 
     return { correctMoves, incorrectButIncludedMoves };
 }
+
+export function undoLastMove(currentGuessMoves: string[]) {
+    const currentGuessMovesCopy = [...currentGuessMoves].reverse();
+    const lastMoveIndex = currentGuessMovesCopy.findIndex(
+        (move) => move !== ""
+    );
+    if (lastMoveIndex !== -1) {
+        currentGuessMovesCopy[lastMoveIndex] = "";
+    }
+    return currentGuessMovesCopy.reverse();
+}

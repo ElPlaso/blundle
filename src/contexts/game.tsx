@@ -7,7 +7,7 @@ import {
   setCurrentGame,
 } from "../lib/history";
 import { GuessResults, SavedGame } from "../lib/types";
-import { compareGuessToSolution, GameContext } from "./utils";
+import { compareGuessToSolution, GameContext, undoLastMove } from "./utils";
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const MAX_GUESSES = 6;
@@ -200,13 +200,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   };
 
   const removeLastGuessMove = () => {
-    const currentGuessMovesCopy = [...currentGuessMoves!].reverse();
-    const lastMoveIndex = currentGuessMovesCopy.findIndex(
-      (move) => move !== ""
-    );
-    if (lastMoveIndex === -1) return;
-    currentGuessMovesCopy[lastMoveIndex] = "";
-    setCurrentGuessMoves(currentGuessMovesCopy.reverse());
+    const movesWithLastRemoved = undoLastMove(currentGuessMoves);
+    setCurrentGuessMoves(movesWithLastRemoved);
     game.current.undo();
     setCurrentPosition(game.current.fen());
   };

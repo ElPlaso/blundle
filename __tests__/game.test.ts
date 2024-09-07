@@ -1,5 +1,5 @@
 import { test, describe, expect } from "vitest";
-import { compareGuessToSolution } from "../src/contexts/utils";
+import { compareGuessToSolution, undoLastMove } from "../src/contexts/utils";
 import { formatEmojiString } from "../src/components/stats_modal/utils";
 
 describe("Game", () => {
@@ -46,6 +46,24 @@ describe("Game", () => {
     const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
     expect(result.correctMoves).toEqual([]);
     expect(result.incorrectButIncludedMoves).toEqual([]);
+  });
+
+  test("Undoes final move", () => {
+    const currentGuessMoves = ["a1", "b2", "c3", "c4"];
+    const result = undoLastMove(currentGuessMoves);
+    expect(result).toEqual(["a1", "b2", "c3", ""]);
+  });
+
+  test("Undoes first move", () => {
+    const currentGuessMoves = ["a1", "", "", ""];
+    const result = undoLastMove(currentGuessMoves);
+    expect(result).toEqual(["", "", "", ""]);
+  });
+
+  test("Undoes no move", () => {
+    const currentGuessMoves = ["", "", "", ""];
+    const result = undoLastMove(currentGuessMoves);
+    expect(result).toEqual(["", "", "", ""]);
   });
 });
 
