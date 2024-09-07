@@ -7,7 +7,12 @@ import {
   setCurrentGame,
 } from "../lib/history";
 import { GuessResults, SavedGame } from "../lib/types";
-import { compareGuessToSolution, GameContext, undoLastMove } from "./utils";
+import {
+  compareGuessToSolution,
+  GameContext,
+  generateSolutionMoves,
+  undoLastMove,
+} from "./utils";
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const MAX_GUESSES = 6;
@@ -79,7 +84,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
       // set solution
       const solutionGame = new Chess(position.current);
-      const loadedSolution = [];
+      const loadedSolution: string[] = [];
 
       const solutionLength = puzzle.puzzle.solution.length;
 
@@ -121,20 +126,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
         setAllGuesses(prefilledAllGuesses);
 
-        for (let i = 0; i < solutionLength; i++) {
-          const move = puzzle.puzzle.solution[i];
-          // get potential promotion
-          const promotion = solutionLength === 5 ? move.slice(4, 5) : "q";
-          const moveObject = {
-            from: move.slice(0, 2),
-            to: move.slice(2, 4),
-            promotion: promotion,
-          };
-          const result = solutionGame.move(moveObject);
+        const solutionMoves = generateSolutionMoves(puzzle.puzzle.solution);
+
+        solutionMoves.forEach((move) => {
+          const result = solutionGame.move(move);
           if (result) {
             loadedSolution.push(result.san);
           }
-        }
+        });
 
         solution.current = loadedSolution;
 

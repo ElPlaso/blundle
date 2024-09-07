@@ -55,3 +55,16 @@ export function undoLastMove(currentGuessMoves: string[]) {
     }
     return currentGuessMovesCopy.reverse();
 }
+
+export function generateSolutionMoves(puzzleSolution: string[]): { from: string; to: string; promotion?: string }[] {
+    return puzzleSolution.map((move) => {
+        // get potential promotion
+        const promotion = move.length === 5 ? move.slice(4, 5) : undefined;
+        const moveObject = {
+            from: move.slice(0, 2),
+            to: move.slice(2, 4),
+            promotion,
+        };
+        return moveObject;
+    });
+}

@@ -1,5 +1,5 @@
 import { test, describe, expect } from "vitest";
-import { compareGuessToSolution, undoLastMove } from "../src/contexts/utils";
+import { compareGuessToSolution, generateSolutionMoves, undoLastMove } from "../src/contexts/utils";
 import { formatEmojiString } from "../src/components/stats_modal/utils";
 
 describe("Game", () => {
@@ -65,6 +65,17 @@ describe("Game", () => {
     const result = undoLastMove(currentGuessMoves);
     expect(result).toEqual(["", "", "", ""]);
   });
+
+  test("Generates solution moves", () => {
+    const puzzleSolution = ["a1b2", "c3d4", "e5f6", "g7h8q"];
+    const result = generateSolutionMoves(puzzleSolution);
+    expect(result).toEqual([
+      { from: "a1", to: "b2" },
+      { from: "c3", to: "d4" },
+      { from: "e5", to: "f6" },
+      { from: "g7", to: "h8", promotion: "q" },
+    ]);
+  })
 });
 
 describe("Game results", () => {
