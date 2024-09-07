@@ -1,5 +1,6 @@
 import { test, describe, expect } from "vitest";
 import { compareGuessToSolution } from "../src/contexts/utils";
+import { formatEmojiString } from "../src/components/stats_modal/utils";
 
 describe("Game", () => {
   test("Compares current guess to solution, all correct", () => {
@@ -47,3 +48,20 @@ describe("Game", () => {
     expect(result.incorrectButIncludedMoves).toEqual([]);
   });
 });
+
+describe("Game results", () => {
+  test("Formats game result emojis correctly", () => {
+    const solution = ["a1", "b2", "c3", "d4"];
+    const allGuesses = [
+      ["a2", "b3", "c4", "d5"],
+      ["a1", "b2", "d4", "c3"],
+      ["a1", "b2", "c3", "d4"],
+      ["", "", "", ""],
+      ["", "", "", ""],
+      ["", "", "", ""],
+    ]
+    const guessResults = allGuesses.map(guess => compareGuessToSolution(guess, solution, 4));
+    const result = formatEmojiString(allGuesses, guessResults);
+    expect(result).toEqual("⬛⬛⬛⬛\n🟩🟩🟨🟨\n🟩🟩🟩🟩\n");
+  });
+})
