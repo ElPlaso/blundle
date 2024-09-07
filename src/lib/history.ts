@@ -1,7 +1,7 @@
 import { SavedGame } from "./types";
 
 
-export function getCurrentGame() {
+export function getCurrentGame(): SavedGame | null {
   const currentGame = localStorage.getItem("currentGame");
   if (currentGame) {
     return JSON.parse(currentGame);

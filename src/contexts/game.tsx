@@ -85,9 +85,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
       numberOfMovesPerGuess.current = solutionLength;
 
-      const currentSetGame: SavedGame = getCurrentGame();
+      const currentSetGame: SavedGame | null = getCurrentGame();
 
-      if (currentSetGame?.id === puzzle.game.id) {
+      if (currentSetGame && currentSetGame.id === puzzle.game.id) {
         const reloadedGame = new Chess(loadedGame.fen());
 
         for (let i = 0; i < currentSetGame.currentGuess.length; i++) {
@@ -157,9 +157,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, [guessResults, isLost, isSolved, numberOfSubmissions]);
 
   useEffect(() => {
-    const gameToUpdate: SavedGame = getCurrentGame();
+    const gameToUpdate: SavedGame | null = getCurrentGame();
     if (gameToUpdate && currentPosition) {
-      setCurrentGame({
+      const currentGame: SavedGame = {
         id: gameToUpdate.id,
         fen: currentPosition,
         solution: solution.current,
@@ -169,16 +169,18 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         didWin: isSolved,
         didFinish: isSolved || isLost,
         guessResults: guessResults,
-      });
+      };
+
+      setCurrentGame(currentGame);
 
       const history = getGameHistory();
 
-      if (isSolved || isLost) {
-        if (history.length === 0) {
-          saveGame(getCurrentGame());
-        } else if (history[history.length - 1].id != gameToUpdate.id) {
-          saveGame(getCurrentGame());
-        }
+      if (
+        (isSolved || isLost) &&
+        (history.length === 0 ||
+          history[history.length - 1].id != gameToUpdate.id)
+      ) {
+        saveGame(currentGame);
       }
     }
   }, [
