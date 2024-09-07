@@ -45,14 +45,25 @@ export function compareGuessToSolution(currentGuessMoves: string[], solution: st
     return { correctMoves, incorrectButIncludedMoves };
 }
 
-export function undoLastMove(currentGuessMoves: string[]) {
+export function addMove(currentGuessMoves: string[], guessMove: string): string[] | undefined {
+    const currentGuessMovesCopy = [...currentGuessMoves!];
+    const emptyIndex = currentGuessMovesCopy.findIndex((move) => move === "");
+    if (emptyIndex === -1) return;
+    currentGuessMovesCopy[emptyIndex] = guessMove;
+    return currentGuessMovesCopy;
+}
+
+export function removeLastMove(currentGuessMoves: string[]): string[] | undefined {
     const currentGuessMovesCopy = [...currentGuessMoves].reverse();
     const lastMoveIndex = currentGuessMovesCopy.findIndex(
         (move) => move !== ""
     );
-    if (lastMoveIndex !== -1) {
-        currentGuessMovesCopy[lastMoveIndex] = "";
+    if (lastMoveIndex === -1) {
+        return;
     }
+
+    currentGuessMovesCopy[lastMoveIndex] = "";
+
     return currentGuessMovesCopy.reverse();
 }
 

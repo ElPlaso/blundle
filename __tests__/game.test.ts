@@ -1,5 +1,5 @@
 import { test, describe, expect } from "vitest";
-import { compareGuessToSolution, generateSolutionMoves, undoLastMove } from "../src/contexts/utils";
+import { addMove, compareGuessToSolution, generateSolutionMoves, removeLastMove } from "../src/contexts/utils";
 import { formatEmojiString } from "../src/components/stats_modal/utils";
 
 describe("Game", () => {
@@ -48,22 +48,40 @@ describe("Game", () => {
     expect(result.incorrectButIncludedMoves).toEqual([]);
   });
 
+  test("Adds final move", () => {
+    const currentGuessMoves = ["a1", "b2", "c3", ""];
+    const result = addMove(currentGuessMoves, "d4");
+    expect(result).toEqual(["a1", "b2", "c3", "d4"]);
+  });
+
+  test("Adds first move", () => {
+    const currentGuessMoves = ["", "", "", ""];
+    const result = addMove(currentGuessMoves, "a1");
+    expect(result).toEqual(["a1", "", "", ""]);
+  });
+
+  test("Adds no move", () => {
+    const currentGuessMoves = ["a1", "b2", "c3", "d4"];
+    const result = addMove(currentGuessMoves, "e5");
+    expect(result).toEqual(undefined);
+  });
+
   test("Undoes final move", () => {
     const currentGuessMoves = ["a1", "b2", "c3", "c4"];
-    const result = undoLastMove(currentGuessMoves);
+    const result = removeLastMove(currentGuessMoves);
     expect(result).toEqual(["a1", "b2", "c3", ""]);
   });
 
   test("Undoes first move", () => {
     const currentGuessMoves = ["a1", "", "", ""];
-    const result = undoLastMove(currentGuessMoves);
+    const result = removeLastMove(currentGuessMoves);
     expect(result).toEqual(["", "", "", ""]);
   });
 
   test("Undoes no move", () => {
     const currentGuessMoves = ["", "", "", ""];
-    const result = undoLastMove(currentGuessMoves);
-    expect(result).toEqual(["", "", "", ""]);
+    const result = removeLastMove(currentGuessMoves);
+    expect(result).toEqual(undefined);
   });
 
   test("Generates solution moves", () => {

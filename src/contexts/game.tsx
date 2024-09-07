@@ -8,10 +8,11 @@ import {
 } from "../lib/history";
 import { GuessResults, SavedGame } from "../lib/types";
 import {
+  addMove,
   compareGuessToSolution,
   GameContext,
   generateSolutionMoves,
-  undoLastMove,
+  removeLastMove,
 } from "./utils";
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
@@ -193,15 +194,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   ]);
 
   const makeGuessMove = (guessMove: string) => {
-    const currentGuessMovesCopy = [...currentGuessMoves!];
-    const emptyIndex = currentGuessMovesCopy.findIndex((move) => move === "");
-    if (emptyIndex === -1) return;
-    currentGuessMovesCopy[emptyIndex] = guessMove;
-    setCurrentGuessMoves(currentGuessMovesCopy);
+    const movesWithMoveAdded = addMove(currentGuessMoves, guessMove);
+    if (!movesWithMoveAdded) return;
+    setCurrentGuessMoves(movesWithMoveAdded);
   };
 
   const removeLastGuessMove = () => {
-    const movesWithLastRemoved = undoLastMove(currentGuessMoves);
+    const movesWithLastRemoved = removeLastMove(currentGuessMoves);
+    if (!movesWithLastRemoved) return;
     setCurrentGuessMoves(movesWithLastRemoved);
     game.current.undo();
     setCurrentPosition(game.current.fen());
