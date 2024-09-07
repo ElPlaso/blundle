@@ -24,7 +24,7 @@ export default function ChessBoard() {
 
     const newSquares: Record<string, Record<string, string>> = {};
 
-    moves.map((move: Move) => {
+    moves.forEach((move: Move) => {
       newSquares[move.to] = {
         background:
           game.get(move.to) &&
@@ -33,7 +33,6 @@ export default function ChessBoard() {
             : "radial-gradient(circle, rgba(0,0,0,.1) 25%, transparent 25%)",
         borderRadius: "50%",
       };
-      return move;
     });
 
     // piece in square

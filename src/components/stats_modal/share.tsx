@@ -3,6 +3,7 @@ import { Portal } from "@mui/material";
 import { useState } from "react";
 import { useGameContext } from "../../contexts/utils";
 import Toast from "../shared/Toast";
+import { formatEmojiString } from "./utils";
 
 export default function Share() {
   const { isSolved, isLost, guessResults, allGuesses, numberOfSubmissions } =
@@ -21,23 +22,7 @@ export default function Share() {
       }! \n`;
     }
 
-    let emojiString = "";
-    for (let i = 0; i < allGuesses.length; i++) {
-      let guessEmojiString = "";
-      for (let j = 0; j < allGuesses[i].length; j++) {
-        if (guessResults[i].correctMoves.includes(j)) {
-          guessEmojiString += "🟩";
-        } else if (guessResults[i].incorrectButIncludedMoves.includes(j)) {
-          guessEmojiString += "🟨";
-        } else {
-          guessEmojiString += "⬛";
-        }
-      }
-      emojiString += `${guessEmojiString}\n`;
-      if (guessEmojiString === "🟩".repeat(allGuesses[i].length)) {
-        break;
-      }
-    }
+    const emojiString = formatEmojiString(allGuesses, guessResults);
 
     shareString += `${emojiString}`;
 

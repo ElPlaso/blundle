@@ -7,7 +7,13 @@ import {
   setCurrentGame,
 } from "../lib/history";
 import { GuessResults, SavedGame } from "../lib/types";
-import { GameContext } from "./utils";
+import {
+  addMove,
+  compareGuessToSolution,
+  GameContext,
+  generateSolutionMoves,
+  removeLastMove,
+} from "./utils";
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const MAX_GUESSES = 6;
@@ -79,15 +85,15 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
       // set solution
       const solutionGame = new Chess(position.current);
-      const loadedSolution = [];
+      const loadedSolution: string[] = [];
 
       const solutionLength = puzzle.puzzle.solution.length;
 
       numberOfMovesPerGuess.current = solutionLength;
 
-      const currentSetGame: SavedGame = getCurrentGame();
+      const currentSetGame: SavedGame | null = getCurrentGame();
 
-      if (currentSetGame?.id === puzzle.game.id) {
+      if (currentSetGame && currentSetGame.id === puzzle.game.id) {
         const reloadedGame = new Chess(loadedGame.fen());
 
         for (let i = 0; i < currentSetGame.currentGuess.length; i++) {
@@ -121,20 +127,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
         setAllGuesses(prefilledAllGuesses);
 
-        for (let i = 0; i < solutionLength; i++) {
-          const move = puzzle.puzzle.solution[i];
-          // get potential promotion
-          const promotion = solutionLength === 5 ? move.slice(4, 5) : "q";
-          const moveObject = {
-            from: move.slice(0, 2),
-            to: move.slice(2, 4),
-            promotion: promotion,
-          };
-          const result = solutionGame.move(moveObject);
+        const solutionMoves = generateSolutionMoves(puzzle.puzzle.solution);
+
+        solutionMoves.forEach((move) => {
+          const result = solutionGame.move(move);
           if (result) {
             loadedSolution.push(result.san);
           }
-        }
+        });
 
         solution.current = loadedSolution;
 
@@ -157,9 +157,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, [guessResults, isLost, isSolved, numberOfSubmissions]);
 
   useEffect(() => {
-    const gameToUpdate: SavedGame = getCurrentGame();
+    const gameToUpdate: SavedGame | null = getCurrentGame();
     if (gameToUpdate && currentPosition) {
-      setCurrentGame({
+      const currentGame: SavedGame = {
         id: gameToUpdate.id,
         fen: currentPosition,
         solution: solution.current,
@@ -169,16 +169,18 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         didWin: isSolved,
         didFinish: isSolved || isLost,
         guessResults: guessResults,
-      });
+      };
+
+      setCurrentGame(currentGame);
 
       const history = getGameHistory();
 
-      if (isSolved || isLost) {
-        if (history.length === 0) {
-          saveGame(getCurrentGame());
-        } else if (history[history.length - 1].id != gameToUpdate.id) {
-          saveGame(getCurrentGame());
-        }
+      if (
+        (isSolved || isLost) &&
+        (history.length === 0 ||
+          history[history.length - 1].id != gameToUpdate.id)
+      ) {
+        saveGame(currentGame);
       }
     }
   }, [
@@ -192,21 +194,15 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   ]);
 
   const makeGuessMove = (guessMove: string) => {
-    const currentGuessMovesCopy = [...currentGuessMoves!];
-    const emptyIndex = currentGuessMovesCopy.findIndex((move) => move === "");
-    if (emptyIndex === -1) return;
-    currentGuessMovesCopy[emptyIndex] = guessMove;
-    setCurrentGuessMoves(currentGuessMovesCopy);
+    const movesWithMoveAdded = addMove(currentGuessMoves, guessMove);
+    if (!movesWithMoveAdded) return;
+    setCurrentGuessMoves(movesWithMoveAdded);
   };
 
   const removeLastGuessMove = () => {
-    const currentGuessMovesCopy = [...currentGuessMoves!].reverse();
-    const lastMoveIndex = currentGuessMovesCopy.findIndex(
-      (move) => move !== ""
-    );
-    if (lastMoveIndex === -1) return;
-    currentGuessMovesCopy[lastMoveIndex] = "";
-    setCurrentGuessMoves(currentGuessMovesCopy.reverse());
+    const movesWithLastRemoved = removeLastMove(currentGuessMoves);
+    if (!movesWithLastRemoved) return;
+    setCurrentGuessMoves(movesWithLastRemoved);
     game.current.undo();
     setCurrentPosition(game.current.fen());
   };
@@ -218,7 +214,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       return previous;
     });
     setNumberOfSubmissions((previous) => previous + 1);
-    const result = compareGuessToSolution();
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution.current,
+      numberOfMovesPerGuess.current
+    );
     setGuessResults((previous) => {
       previous[numberOfSubmissions] = result;
       return previous;
@@ -243,28 +243,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const getSolution = () => {
     return solution.current;
-  };
-
-  // return indexes of guess moves that are in the correct position
-  // as well as indexes of guess moves that are in the solution but in the wrong position
-  const compareGuessToSolution = () => {
-    const correctMoves: number[] = [];
-    const incorrectButIncludedMoves: number[] = [];
-
-    currentGuessMoves.forEach((move, index) => {
-      // allow any checkmate if rest of sequence is correct
-      if (
-        move === solution.current[index] ||
-        (move.includes("#") &&
-          correctMoves.length === numberOfMovesPerGuess.current - 1)
-      ) {
-        correctMoves.push(index);
-      } else if (solution.current.includes(move)) {
-        incorrectButIncludedMoves.push(index);
-      }
-    });
-
-    return { correctMoves, incorrectButIncludedMoves };
   };
 
   const value = {
