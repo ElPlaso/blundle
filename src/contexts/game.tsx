@@ -72,89 +72,93 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     return true;
   }
 
-  useEffect(() => {
-    async function fetchPuzzle() {
-      const url = import.meta.env.VITE_DAILY_CHESS_PUZZLE_URL;
-      const response = await fetch(url);
+  useEffect(
+    () => {
+      async function fetchPuzzle() {
+        const url = import.meta.env.VITE_DAILY_CHESS_PUZZLE_URL;
+        const response = await fetch(url);
 
-      const puzzleEntry = await response.json();
+        const puzzleEntry = await response.json();
 
-      const puzzle = JSON.parse(puzzleEntry.puzzle);
+        const puzzle = JSON.parse(puzzleEntry.puzzle);
 
-      const loadedGame = new Chess(puzzle.fen);
+        const loadedGame = new Chess(puzzle.fen);
 
-      // make first move
-      loadedGame.move(notationToMove(puzzle.moves[0]));
+        // make first move
+        loadedGame.move(notationToMove(puzzle.moves[0]));
 
-      position.current = loadedGame.fen();
+        position.current = loadedGame.fen();
 
-      setToWin(loadedGame.turn() === "w" ? "White" : "Black");
+        setToWin(loadedGame.turn() === "w" ? "White" : "Black");
 
-      // removes leading move
-      const puzzleMoves = puzzle.moves as Array<string>;
-      puzzleMoves.shift();
+        // removes leading move
+        const puzzleMoves = puzzle.moves as Array<string>;
+        puzzleMoves.shift();
 
-      const solutionLength = puzzleMoves.length;
+        const solutionLength = puzzleMoves.length;
 
-      numberOfMovesPerGuess.current = solutionLength;
+        numberOfMovesPerGuess.current = solutionLength;
 
-      const currentSetGame: SavedGame | null = getCurrentGame();
+        const currentSetGame: SavedGame | null = getCurrentGame();
 
-      if (currentSetGame && currentSetGame.id === puzzle.puzzleid) {
-        const reloadedGame = new Chess(loadedGame.fen());
+        if (currentSetGame && currentSetGame.id === puzzle.puzzleid) {
+          const reloadedGame = new Chess(loadedGame.fen());
 
-        for (let i = 0; i < currentSetGame.currentGuess.length; i++) {
-          if (currentSetGame.currentGuess[i] === "") break;
-          reloadedGame.move(currentSetGame.currentGuess[i]);
+          for (let i = 0; i < currentSetGame.currentGuess.length; i++) {
+            if (currentSetGame.currentGuess[i] === "") break;
+            reloadedGame.move(currentSetGame.currentGuess[i]);
+          }
+
+          game.current = reloadedGame;
+
+          setCurrentGuessMoves(currentSetGame.currentGuess);
+          setAllGuesses(currentSetGame.allGuesses);
+          setGuessResults(currentSetGame.guessResults);
+          setNumberOfSubmissions(currentSetGame.numberOfSubmissions);
+          setIsSolved(currentSetGame.didWin);
+          setIsLost(currentSetGame.didFinish && !currentSetGame.didWin);
+
+          solution.current = currentSetGame.solution;
+          position.current = currentSetGame.fen;
+        } else {
+          game.current = loadedGame;
+
+          const prefilledCurrentGuessMoves = Array.from(
+            { length: numberOfMovesPerGuess.current },
+            () => ""
+          );
+          setCurrentGuessMoves(prefilledCurrentGuessMoves);
+
+          const prefilledAllGuesses = Array.from({ length: MAX_GUESSES }, () =>
+            Array.from({ length: numberOfMovesPerGuess.current }, () => "")
+          );
+
+          setAllGuesses(prefilledAllGuesses);
+
+          const puzzleMovesSan = pvToSan(puzzleMoves, loadedGame.fen());
+
+          solution.current = puzzleMovesSan;
+
+          setCurrentGame({
+            id: puzzle.puzzleid,
+            fen: position.current,
+            solution: solution.current,
+            currentGuess: prefilledCurrentGuessMoves,
+            allGuesses: prefilledAllGuesses,
+            numberOfSubmissions,
+            didWin: isSolved,
+            didFinish: isSolved || isLost,
+            guessResults,
+          });
         }
-
-        game.current = reloadedGame;
-
-        setCurrentGuessMoves(currentSetGame.currentGuess);
-        setAllGuesses(currentSetGame.allGuesses);
-        setGuessResults(currentSetGame.guessResults);
-        setNumberOfSubmissions(currentSetGame.numberOfSubmissions);
-        setIsSolved(currentSetGame.didWin);
-        setIsLost(currentSetGame.didFinish && !currentSetGame.didWin);
-
-        solution.current = currentSetGame.solution;
-        position.current = currentSetGame.fen;
-      } else {
-        game.current = loadedGame;
-
-        const prefilledCurrentGuessMoves = Array.from(
-          { length: numberOfMovesPerGuess.current },
-          () => ""
-        );
-        setCurrentGuessMoves(prefilledCurrentGuessMoves);
-
-        const prefilledAllGuesses = Array.from({ length: MAX_GUESSES }, () =>
-          Array.from({ length: numberOfMovesPerGuess.current }, () => "")
-        );
-
-        setAllGuesses(prefilledAllGuesses);
-
-        const puzzleMovesSan = pvToSan(puzzleMoves, loadedGame.fen());
-
-        solution.current = puzzleMovesSan;
-
-        setCurrentGame({
-          id: puzzle.puzzleid,
-          fen: position.current,
-          solution: solution.current,
-          currentGuess: prefilledCurrentGuessMoves,
-          allGuesses: prefilledAllGuesses,
-          numberOfSubmissions,
-          didWin: isSolved,
-          didFinish: isSolved || isLost,
-          guessResults,
-        });
+        setCurrentPosition(game.current.fen());
       }
-      setCurrentPosition(game.current.fen());
-    }
 
-    fetchPuzzle();
-  }, [guessResults, isLost, isSolved, numberOfSubmissions]);
+      fetchPuzzle();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [] // [guessResults, isLost, isSolved, numberOfSubmissions] // one of these may be problematic
+  );
 
   useEffect(() => {
     const gameToUpdate: SavedGame | null = getCurrentGame();
