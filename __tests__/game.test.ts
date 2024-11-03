@@ -1,5 +1,5 @@
 import { test, describe, expect } from "vitest";
-import { addMove, compareGuessToSolution, generateSolutionMoves, removeLastMove } from "../src/contexts/utils";
+import { addMove, compareGuessToSolution, pvToSan, removeLastMove } from "../src/contexts/utils";
 import { formatEmojiString } from "../src/components/stats_modal/utils";
 
 describe("Game", () => {
@@ -84,15 +84,11 @@ describe("Game", () => {
     expect(result).toEqual(undefined);
   });
 
-  test("Generates solution moves", () => {
-    const puzzleSolution = ["a1b2", "c3d4", "e5f6", "g7h8q"];
-    const result = generateSolutionMoves(puzzleSolution);
-    expect(result).toEqual([
-      { from: "a1", to: "b2" },
-      { from: "c3", to: "d4" },
-      { from: "e5", to: "f6" },
-      { from: "g7", to: "h8", promotion: "q" },
-    ]);
+  test("Converts pawn move notation from PV to SAN", () => {
+    const pv = ["a2a3"]
+    const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    const result = pvToSan(pv, fen);
+    expect(result).toEqual(["a3"]);
   })
 });
 

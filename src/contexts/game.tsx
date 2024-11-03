@@ -11,7 +11,8 @@ import {
   addMove,
   compareGuessToSolution,
   GameContext,
-  generateSolutionMoves,
+  notationToMove,
+  pvToSan,
   removeLastMove,
 } from "./utils";
 
@@ -73,27 +74,33 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     async function fetchPuzzle() {
-      const url = "https://lichess.org/api/puzzle/daily";
+      const url = import.meta.env.VITE_DAILY_CHESS_PUZZLE_URL;
       const response = await fetch(url);
-      const puzzle = await response.json();
 
-      const loadedGame = new Chess();
-      loadedGame.loadPgn(puzzle.game.pgn);
+      const puzzleEntry = await response.json();
+
+      const puzzle = JSON.parse(puzzleEntry.puzzle);
+
+      const loadedGame = new Chess(puzzle.fen);
+
+      // make first move
+      loadedGame.move(notationToMove(puzzle.moves[0]));
 
       position.current = loadedGame.fen();
+
       setToWin(loadedGame.turn() === "w" ? "White" : "Black");
 
-      // set solution
-      const solutionGame = new Chess(position.current);
-      const loadedSolution: string[] = [];
+      // removes leading move
+      const puzzleMoves = puzzle.moves as Array<string>;
+      puzzleMoves.shift();
 
-      const solutionLength = puzzle.puzzle.solution.length;
+      const solutionLength = puzzleMoves.length;
 
       numberOfMovesPerGuess.current = solutionLength;
 
       const currentSetGame: SavedGame | null = getCurrentGame();
 
-      if (currentSetGame && currentSetGame.id === puzzle.game.id) {
+      if (currentSetGame && currentSetGame.id === puzzle.puzzleid) {
         const reloadedGame = new Chess(loadedGame.fen());
 
         for (let i = 0; i < currentSetGame.currentGuess.length; i++) {
@@ -127,19 +134,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
         setAllGuesses(prefilledAllGuesses);
 
-        const solutionMoves = generateSolutionMoves(puzzle.puzzle.solution);
+        const puzzleMovesSan = pvToSan(puzzleMoves, loadedGame.fen());
 
-        solutionMoves.forEach((move) => {
-          const result = solutionGame.move(move);
-          if (result) {
-            loadedSolution.push(result.san);
-          }
-        });
-
-        solution.current = loadedSolution;
+        solution.current = puzzleMovesSan;
 
         setCurrentGame({
-          id: puzzle.game.id,
+          id: puzzle.puzzleid,
           fen: position.current,
           solution: solution.current,
           currentGuess: prefilledCurrentGuessMoves,
