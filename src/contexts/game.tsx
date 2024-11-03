@@ -34,6 +34,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const [toWin, setToWin] = useState<"White" | "Black">(
     "White" as "White" | "Black"
   );
+  const [puzzleNumber, setPuzzleNumber] = useState<number | null>(null);
 
   const [guessResults, setGuessResults] = useState<GuessResults[]>(
     Array.from({ length: MAX_GUESSES }, () => {
@@ -79,6 +80,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         const response = await fetch(url);
 
         const puzzleEntry = await response.json();
+
+        setPuzzleNumber(puzzleEntry.key);
 
         const puzzle = JSON.parse(puzzleEntry.puzzle);
 
@@ -255,6 +258,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     isSolved,
     isLost,
     toWin,
+    puzzleNumber,
     currentGuessMoves,
     allGuesses,
     guessResults,

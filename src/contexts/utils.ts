@@ -8,6 +8,7 @@ export const intitialGameState: GameContextType = {
     isSolved: false,
     isLost: false,
     toWin: "White",
+    puzzleNumber: null,
     currentGuessMoves: [],
     allGuesses: [],
     guessResults: [],
