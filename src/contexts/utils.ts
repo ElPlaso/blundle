@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
 import { GameContextType } from "../lib/types";
+import { Chess } from "chess.js";
 
 export const intitialGameState: GameContextType = {
     currentPosition: null,
@@ -7,6 +8,7 @@ export const intitialGameState: GameContextType = {
     isSolved: false,
     isLost: false,
     toWin: "White",
+    puzzleNumber: null,
     currentGuessMoves: [],
     allGuesses: [],
     guessResults: [],
@@ -67,15 +69,26 @@ export function removeLastMove(currentGuessMoves: string[]): string[] | undefine
     return currentGuessMovesCopy.reverse();
 }
 
-export function generateSolutionMoves(puzzleSolution: string[]): { from: string; to: string; promotion?: string }[] {
-    return puzzleSolution.map((move) => {
-        // get potential promotion
-        const promotion = move.length === 5 ? move.slice(4, 5) : undefined;
-        const moveObject = {
-            from: move.slice(0, 2),
-            to: move.slice(2, 4),
-            promotion,
-        };
-        return moveObject;
-    });
+export function notationToMove(move: string) {
+    return {
+        from: move.slice(0, 2),
+        to: move.slice(2, 4),
+        promotion: move.length == 5 ? move.slice(4, 5) : undefined
+    };
+}
+
+// Ref: https://talkchess.com/viewtopic.php?t=80193
+export function pvToSan(pv: Array<string>, fen: string) {
+    const game = new Chess(fen);
+
+    const moves = pv;
+    const san = [];
+
+    for (let i = 0; i < moves.length; ++i) {
+        const move = game.move(notationToMove(moves[i]));
+        if (move == null) break;
+        san.push(move.san);
+    }
+
+    return san;
 }

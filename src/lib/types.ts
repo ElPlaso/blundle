@@ -21,6 +21,7 @@ export interface GameContextType {
   isSolved: boolean;
   isLost: boolean;
   toWin: "White" | "Black";
+  puzzleNumber: number | null;
   currentGuessMoves: string[];
   allGuesses: string[][];
   guessResults: GuessResults[];

@@ -23,12 +23,12 @@ export default function InfoModal() {
       title="How To Play"
       isOpen={isOpen}
     >
-      <DialogContent className="flex flex-col w-full gap-y-4">
+      <DialogContent className="flex w-full flex-col gap-y-4">
         <span className="text-sm text-lightAbsent dark:text-white">
           Solve the <b>Chess Puzzle</b> in 6 tries
         </span>
         <span className="flex flex-col text-sm text-lightAbsent">
-          <ul className="flex flex-col ml-4 list-disc gap-y-2">
+          <ul className="ml-4 flex list-disc flex-col gap-y-2">
             <li>Click to move pieces</li>
             <li>Find the best moves (including opponent moves)</li>
             <li>Each move must be a legal move in the position</li>
@@ -51,7 +51,7 @@ export default function InfoModal() {
         </span>
         <DialogContentText className="flex flex-col gap-y-2">
           <span className="font-bold text-black dark:text-white">Examples</span>
-          <span className="flex flex-col text-sm text-lightAbsent gap-y-2">
+          <span className="flex flex-col gap-y-2 text-sm text-lightAbsent">
             <ResultExample
               moves={["e4", "e5", "Nf3"]}
               type="Correct"
@@ -70,15 +70,23 @@ export default function InfoModal() {
           </span>
         </DialogContentText>
         <DialogContentText className="flex flex-col gap-y-2">
-          <span className="flex flex-col pt-4 text-sm border-t text-lightAbsent dark:border-darkAbsent">
+          <span className="flex gap-x-1 border-t pt-2 text-sm text-lightAbsent dark:border-darkAbsent">
             There is a new puzzle daily courtesy of
+            <a
+              target="_blank"
+              href="https://rapidapi.com/KeeghanM/api/chess-puzzles"
+              className="font-bold hover:underline"
+            >
+              this
+            </a>
             <a
               target="_blank"
               href="https://lichess.org/"
               className="font-bold hover:underline"
             >
-              lichess.org
+              lichess
             </a>
+            api
           </span>
         </DialogContentText>
       </DialogContent>
