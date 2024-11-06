@@ -35,6 +35,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     "White" as "White" | "Black"
   );
   const [puzzleNumber, setPuzzleNumber] = useState<number | null>(null);
+  const [originalPosition, setOriginalPosition] = useState<string | null>(null);
 
   const [guessResults, setGuessResults] = useState<GuessResults[]>(
     Array.from({ length: MAX_GUESSES }, () => {
@@ -92,6 +93,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
         position.current = loadedGame.fen();
 
+        setOriginalPosition(position.current);
+
         setToWin(loadedGame.turn() === "w" ? "White" : "Black");
 
         // removes leading move
@@ -105,6 +108,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         const currentSetGame: SavedGame | null = getCurrentGame();
 
         if (currentSetGame && currentSetGame.id === puzzle.puzzleid) {
+          console.log(currentSetGame);
+
           const reloadedGame = new Chess(loadedGame.fen());
 
           for (let i = 0; i < currentSetGame.currentGuess.length; i++) {
@@ -244,8 +249,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
 
     // reset board
-    game.current.load(position.current!);
-    setCurrentPosition(game.current.fen());
+    if (originalPosition) {
+      game.current.load(originalPosition);
+      setCurrentPosition(game.current.fen());
+    }
   };
 
   const getSolution = () => {
