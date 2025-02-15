@@ -30,22 +30,30 @@ describe("Game", () => {
     expect(result.incorrectButIncludedMoves).toEqual([1, 3]);
   });
 
-  test("Compares current guess to solution, partially correct with duplicate move", () => {
-    const currentGuessMoves = ["a1", "d4", "c4", "b2"];
-    const solution = ["a1", "a1", "c3", "d4"];
+  test("Compares current guess to solution, partially correct with incorrect duplicate move", () => {
+    const currentGuessMoves = ["a1", "d4", "c4", "a1"];
+    const solution = ["a1", "b2", "c3", "d4"];
     const numberOfMovesPerGuess = 4;
     const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
     expect(result.correctMoves).toEqual([0]);
-    expect(result.incorrectButIncludedMoves).toEqual([3]);
+    expect(result.incorrectButIncludedMoves).toEqual([1]);
   });
 
-  test("Compares current guess to solution, partially correct with earlier duplicate move", () => {
-    const currentGuessMoves = ["d4", "a1", "c4", "b2"];
-    const solution = ["a1", "a1", "c3", "d4"];
+  test("Compares current guess to solution, partially correct with earlier incorrect duplicate move", () => {
+    const currentGuessMoves = ["a1", "d4", "c4", "a1"];
+    const solution = ["d4", "b2", "c3", "a1"];
     const numberOfMovesPerGuess = 4;
     const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
-    expect(result.correctMoves).toEqual([1]);
-    expect(result.incorrectButIncludedMoves).toEqual([3]);
+    expect(result.correctMoves).toEqual([3]);
+    expect(result.incorrectButIncludedMoves).toEqual([1]);
+  });
+
+  test("Compares current guess to solution, partially correct with duplicate correct moves", () => {
+    const currentGuessMoves = ["a1", "d4", "c4", "a1"];
+    const solution = ["a1", "b2", "c3", "a1"];
+    const numberOfMovesPerGuess = 4;
+    const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
+    expect(result.correctMoves).toEqual([0, 3]);
   });
 
   test("Allows any checkmate as long as rest of sequence is correct", () => {
