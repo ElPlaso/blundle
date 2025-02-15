@@ -49,6 +49,9 @@ export function compareGuessToSolution(currentGuessMoves: string[], solution: st
     currentGuessMoves.forEach((move, index) => {
         if (remainingSolution.includes(move)) {
             incorrectButIncludedMoves.push(index);
+            // remove from remaining solution
+            const newIndex = remainingSolution.indexOf(move);
+            remainingSolution.splice(newIndex, 1);
         }
     })
 
