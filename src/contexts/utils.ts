@@ -30,6 +30,7 @@ export function useGameContext() {
 export function compareGuessToSolution(currentGuessMoves: string[], solution: string[], numberOfMovesPerGuess: number): { correctMoves: number[]; incorrectButIncludedMoves: number[] } {
     const correctMoves: number[] = [];
     const incorrectButIncludedMoves: number[] = [];
+    const remainingSolution: string[] = [...solution];
 
     currentGuessMoves.forEach((move, index) => {
         // allow any checkmate if rest of sequence is correct
@@ -39,10 +40,17 @@ export function compareGuessToSolution(currentGuessMoves: string[], solution: st
                 correctMoves.length === numberOfMovesPerGuess - 1)
         ) {
             correctMoves.push(index);
-        } else if (solution.includes(move)) {
-            incorrectButIncludedMoves.push(index);
+            // remove from remaining solution
+            const newIndex = remainingSolution.indexOf(move);
+            remainingSolution.splice(newIndex, 1);
         }
     });
+
+    currentGuessMoves.forEach((move, index) => {
+        if (remainingSolution.includes(move)) {
+            incorrectButIncludedMoves.push(index);
+        }
+    })
 
     return { correctMoves, incorrectButIncludedMoves };
 }
