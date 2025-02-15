@@ -49,7 +49,7 @@ describe("Game", () => {
   });
 
   test("Compares current guess to solution, with duplicate partially correct moves", () => {
-    const currentGuessMoves = ["b2", "a1", "c4", "a1"];
+    const currentGuessMoves = ["b1", "a1", "c1", "a1"];
     const solution = ["a1", "b2", "c3", "d4"];
     const numberOfMovesPerGuess = 4;
     const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
