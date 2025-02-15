@@ -48,6 +48,15 @@ describe("Game", () => {
     expect(result.incorrectButIncludedMoves).toEqual([1]);
   });
 
+  test("Compares current guess to solution, with duplicate partially correct moves", () => {
+    const currentGuessMoves = ["b2", "a1", "c4", "a1"];
+    const solution = ["a1", "b2", "c3", "d4"];
+    const numberOfMovesPerGuess = 4;
+    const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
+    expect(result.correctMoves).toEqual([]);
+    expect(result.incorrectButIncludedMoves).toEqual([1]);
+  });
+
   test("Compares current guess to solution, partially correct with duplicate correct moves", () => {
     const currentGuessMoves = ["a1", "d4", "c4", "a1"];
     const solution = ["a1", "b2", "c3", "a1"];
