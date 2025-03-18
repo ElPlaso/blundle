@@ -84,7 +84,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
         setPuzzleNumber(puzzleEntry.key);
 
-        const puzzle = JSON.parse(puzzleEntry.puzzle);
+        const puzzle = puzzleEntry.puzzle;
 
         const loadedGame = new Chess(puzzle.fen);
 
