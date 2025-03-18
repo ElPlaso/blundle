@@ -108,8 +108,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         const currentSetGame: SavedGame | null = getCurrentGame();
 
         if (currentSetGame && currentSetGame.id === puzzle.puzzleid) {
-          console.log(currentSetGame);
-
           const reloadedGame = new Chess(loadedGame.fen());
 
           for (let i = 0; i < currentSetGame.currentGuess.length; i++) {
