@@ -49,6 +49,7 @@ export default function Modal(props: ModalProps) {
         style={{
           color: localStorage.theme == "light" ? "white" : "#212121",
         }}
+        className="transition-all duration-300"
       >
         <style>
           {`

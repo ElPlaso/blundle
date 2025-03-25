@@ -20,15 +20,15 @@ export default function Stats() {
   return (
     <>
       <span className="flex flex-col items-center text-black dark:text-white">
-        <span className="text-3xl font-semi-bold">{numberOfGamesPlayed}</span>
+        <span className="font-semi-bold text-3xl">{numberOfGamesPlayed}</span>
         Played
       </span>
       <span className="flex flex-col items-center text-black dark:text-white">
-        <span className="text-3xl font-semi-bold">{winPercentage ?? "0"}</span>
+        <span className="font-semi-bold text-3xl">{winPercentage ?? "0"}</span>
         Win %{" "}
       </span>
       <span className="flex flex-col items-center text-black dark:text-white">
-        <span className="text-3xl font-semi-bold">
+        <span className="font-semi-bold text-3xl">
           {averageNumberOfGuesses ?? "0"}
         </span>
         Average

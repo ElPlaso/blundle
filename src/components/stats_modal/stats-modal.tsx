@@ -29,8 +29,8 @@ export default function StatsModal() {
         title="STATISTICS"
         isOpen={isOpen}
       >
-        <DialogContent className="flex flex-col w-full gap-y-8">
-          <DialogContentText className="flex justify-between w-full">
+        <DialogContent className="flex flex-col gap-y-8">
+          <DialogContentText className="flex w-full justify-between gap-x-12">
             <Stats />
           </DialogContentText>
           <DialogContentText className="flex flex-col items-center justify-center gap-y-2">
