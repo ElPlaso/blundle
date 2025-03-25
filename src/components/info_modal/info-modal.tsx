@@ -69,25 +69,25 @@ export default function InfoModal() {
             />
           </span>
         </DialogContentText>
-        <DialogContentText className="flex flex-col gap-y-2">
-          <span className="flex gap-x-1 border-t pt-2 text-sm text-lightAbsent dark:border-darkAbsent">
+        <DialogContentText>
+          <div className="border-t pt-2 text-sm text-lightAbsent dark:border-darkAbsent">
             There is a new puzzle daily courtesy of
             <a
               target="_blank"
               href="https://rapidapi.com/KeeghanM/api/chess-puzzles"
-              className="font-bold hover:underline"
+              className="ml-1 font-bold hover:underline"
             >
               this
             </a>
             <a
               target="_blank"
               href="https://lichess.org/"
-              className="font-bold hover:underline"
+              className="m-1 font-bold hover:underline"
             >
               lichess
             </a>
             api
-          </span>
+          </div>
         </DialogContentText>
       </DialogContent>
     </Modal>
