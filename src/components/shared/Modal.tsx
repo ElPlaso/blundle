@@ -58,8 +58,8 @@ export default function Modal(props: ModalProps) {
               };
             `}
         </style>
-        <div className="md:w-[504px] max-sm:w-[238px] flex flex-col items-center mb-4">
-          <DialogTitle className="flex items-center justify-between w-full">
+        <div className="mb-4 flex flex-col items-center max-sm:w-full md:w-[504px]">
+          <DialogTitle className="flex w-full items-center justify-between">
             <span className="text-xl font-bold dark:text-white">{title}</span>
             <IconButton
               onClick={toggleOpen}
