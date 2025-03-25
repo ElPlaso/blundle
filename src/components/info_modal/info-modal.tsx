@@ -75,7 +75,7 @@ export default function InfoModal() {
             <a
               target="_blank"
               href="https://rapidapi.com/KeeghanM/api/chess-puzzles"
-              className="m-1 font-bold hover:underline"
+              className="ml-1 font-bold hover:underline"
             >
               this
             </a>
