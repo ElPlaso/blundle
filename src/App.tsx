@@ -6,6 +6,7 @@ import GuessingArea from "./components/guessing_area/guessing-area";
 import Subheading from "./components/subheading";
 import TopAppBar from "./components/top-app-bar";
 import { GameProvider } from "./contexts/game";
+import PastPuzzles from "./components/past_puzzles/past_puzzles";
 
 function App() {
   return (
@@ -33,12 +34,7 @@ function App() {
             </GameProvider>
           }
         />
-        <Route
-          path="/past-puzzles"
-          element={
-            <div className="text-black dark:text-white">Past Puzzle</div>
-          }
-        />
+        <Route path="/past-puzzles" element={<PastPuzzles />} />
       </Routes>
     </BrowserRouter>
   );
