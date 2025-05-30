@@ -6,7 +6,7 @@ import GuessingArea from "./components/guessing_area/guessing-area";
 import Subheading from "./components/subheading";
 import TopAppBar from "./components/top-app-bar";
 import { GameProvider } from "./contexts/game";
-import PastPuzzles from "./components/past_puzzles/past_puzzles";
+import PastPuzzles from "./components/past_puzzles/past-puzzles";
 import { useEffect } from "react";
 
 function App() {

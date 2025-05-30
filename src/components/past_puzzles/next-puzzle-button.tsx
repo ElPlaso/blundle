@@ -1,6 +1,6 @@
 import { useGameContext } from "../../contexts/utils";
 
-export default function RefreshButton({
+export default function NextPuzzleButton({
   children,
   className,
 }: {

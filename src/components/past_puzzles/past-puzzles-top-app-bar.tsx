@@ -1,7 +1,7 @@
 import { Home, SkipNext } from "@mui/icons-material";
 
 import { Link } from "react-router";
-import RefreshButton from "./refresh_button";
+import NextPuzzleButton from "./next-puzzle-button";
 
 export default function PastPuzzlesTopAppBar() {
   return (
@@ -10,9 +10,9 @@ export default function PastPuzzlesTopAppBar() {
         <Link to="/">
           <Home fontSize="large" className="text-black dark:text-white" />
         </Link>
-        <RefreshButton className="sm:hidden">
+        <NextPuzzleButton className="sm:hidden">
           <SkipNext fontSize="large" className="text-black dark:text-white" />
-        </RefreshButton>
+        </NextPuzzleButton>
       </div>
       <h1 className="flex-1 text-3xl font-bold max-sm:flex-none">Archive</h1>
       <span className="flex-1 max-sm:hidden"></span>
