@@ -14,9 +14,7 @@ export default function PastPuzzlesTopAppBar() {
           <SkipNext fontSize="large" className="text-black dark:text-white" />
         </RefreshButton>
       </div>
-      <h1 className="flex-1 text-3xl font-bold max-sm:flex-none flex-nowrap">
-        Archive
-      </h1>
+      <h1 className="flex-1 text-3xl font-bold max-sm:flex-none">Archive</h1>
       <span className="flex-1 max-sm:hidden"></span>
     </header>
   );
