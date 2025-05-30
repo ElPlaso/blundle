@@ -186,6 +186,23 @@ export function PastPuzzleProvider({
 
   const skipPuzzle = useCallback(() => {
     setCurrentPosition(null);
+    setCurrentGuessMoves(
+      Array.from({ length: numberOfMovesPerGuess.current }, () => "")
+    );
+    setAllGuesses(
+      Array.from({ length: MAX_GUESSES }, () =>
+        Array.from({ length: numberOfMovesPerGuess.current }, () => "")
+      )
+    );
+    setIsLost(false);
+    setIsSolved(false);
+    setNumberOfSubmissions(0);
+    setGuessResults(
+      Array.from({ length: MAX_GUESSES }, () => ({
+        correctMoves: [],
+        incorrectButIncludedMoves: [],
+      }))
+    );
     fetchPuzzle();
   }, [fetchPuzzle]);
 
