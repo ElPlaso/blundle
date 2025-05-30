@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Chess } from "chess.js";
 import { GuessResults } from "../lib/types";
 import {
@@ -22,6 +22,7 @@ export function PastPuzzleProvider({
   const [allGuesses, setAllGuesses] = useState<string[][]>([]);
 
   const [numberOfSubmissions, setNumberOfSubmissions] = useState<number>(0);
+  const [isPuzzleLoading, setIsPuzzleLoading] = useState<boolean>(true);
   const [isSolved, setIsSolved] = useState<boolean>(false);
   const [isLost, setIsLost] = useState<boolean>(false);
 
@@ -73,63 +74,61 @@ export function PastPuzzleProvider({
     return true;
   }
 
-  useEffect(
-    () => {
-      async function fetchPuzzle() {
-        const url = import.meta.env.VITE_HISTORIC_CHESS_PUZZLE_URL;
-        const response = await fetch(url);
+  const fetchPuzzle = useCallback(async () => {
+    const url = import.meta.env.VITE_HISTORIC_CHESS_PUZZLE_URL;
+    setIsPuzzleLoading(true);
+    const response = await fetch(url);
+    setIsPuzzleLoading(false);
 
-        const puzzleEntry = await response.json();
+    const puzzleEntry = await response.json();
 
-        setPuzzleNumber(puzzleEntry.key);
+    setPuzzleNumber(puzzleEntry.key);
 
-        const puzzle = puzzleEntry.puzzle;
+    const puzzle = puzzleEntry.puzzle;
 
-        const loadedGame = new Chess(puzzle.fen);
+    const loadedGame = new Chess(puzzle.fen);
 
-        // make first move
-        loadedGame.move(notationToMove(puzzle.moves[0]));
+    // make first move
+    loadedGame.move(notationToMove(puzzle.moves[0]));
 
-        position.current = loadedGame.fen();
+    position.current = loadedGame.fen();
 
-        setOriginalPosition(position.current);
+    setOriginalPosition(position.current);
 
-        setToWin(loadedGame.turn() === "w" ? "White" : "Black");
+    setToWin(loadedGame.turn() === "w" ? "White" : "Black");
 
-        // removes leading move
-        const puzzleMoves = puzzle.moves as Array<string>;
-        puzzleMoves.shift();
+    // removes leading move
+    const puzzleMoves = puzzle.moves as Array<string>;
+    puzzleMoves.shift();
 
-        const solutionLength = puzzleMoves.length;
+    const solutionLength = puzzleMoves.length;
 
-        numberOfMovesPerGuess.current = solutionLength;
+    numberOfMovesPerGuess.current = solutionLength;
 
-        game.current = loadedGame;
+    game.current = loadedGame;
 
-        const prefilledCurrentGuessMoves = Array.from(
-          { length: numberOfMovesPerGuess.current },
-          () => ""
-        );
-        setCurrentGuessMoves(prefilledCurrentGuessMoves);
+    const prefilledCurrentGuessMoves = Array.from(
+      { length: numberOfMovesPerGuess.current },
+      () => ""
+    );
+    setCurrentGuessMoves(prefilledCurrentGuessMoves);
 
-        const prefilledAllGuesses = Array.from({ length: MAX_GUESSES }, () =>
-          Array.from({ length: numberOfMovesPerGuess.current }, () => "")
-        );
+    const prefilledAllGuesses = Array.from({ length: MAX_GUESSES }, () =>
+      Array.from({ length: numberOfMovesPerGuess.current }, () => "")
+    );
 
-        setAllGuesses(prefilledAllGuesses);
+    setAllGuesses(prefilledAllGuesses);
 
-        const puzzleMovesSan = pvToSan(puzzleMoves, loadedGame.fen());
+    const puzzleMovesSan = pvToSan(puzzleMoves, loadedGame.fen());
 
-        solution.current = puzzleMovesSan;
+    solution.current = puzzleMovesSan;
 
-        setCurrentPosition(game.current.fen());
-      }
+    setCurrentPosition(game.current.fen());
+  }, []);
 
-      fetchPuzzle();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [] // [guessResults, isLost, isSolved, numberOfSubmissions] // one of these may be problematic
-  );
+  useEffect(() => {
+    fetchPuzzle();
+  }, [fetchPuzzle]);
 
   const makeGuessMove = (guessMove: string) => {
     const movesWithMoveAdded = addMove(currentGuessMoves, guessMove);
@@ -185,9 +184,15 @@ export function PastPuzzleProvider({
     return solution.current;
   };
 
+  const skipPuzzle = useCallback(() => {
+    setCurrentPosition(null);
+    fetchPuzzle();
+  }, [fetchPuzzle]);
+
   const value = {
     currentPosition,
     numberOfSubmissions,
+    isPuzzleLoading,
     isSolved,
     isLost,
     toWin,
@@ -200,6 +205,7 @@ export function PastPuzzleProvider({
     removeLastGuessMove,
     submitGuess,
     onDrop,
+    skipPuzzle,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

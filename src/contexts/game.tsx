@@ -23,6 +23,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const [allGuesses, setAllGuesses] = useState<string[][]>([]);
 
   const [numberOfSubmissions, setNumberOfSubmissions] = useState<number>(0);
+  const [isPuzzleLoading, setIsPuzzleLoading] = useState<boolean>(true);
   const [isSolved, setIsSolved] = useState<boolean>(false);
   const [isLost, setIsLost] = useState<boolean>(false);
 
@@ -78,7 +79,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     () => {
       async function fetchPuzzle() {
         const url = import.meta.env.VITE_DAILY_CHESS_PUZZLE_URL;
+
+        setIsPuzzleLoading(true);
         const response = await fetch(url);
+        setIsPuzzleLoading(false);
 
         const puzzleEntry = await response.json();
 
@@ -260,6 +264,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const value = {
     currentPosition,
     numberOfSubmissions,
+    isPuzzleLoading,
     isSolved,
     isLost,
     toWin,

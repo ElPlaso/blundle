@@ -18,6 +18,7 @@ export interface SavedGame {
 export interface GameContextType {
   currentPosition: string | null;
   numberOfSubmissions: number;
+  isPuzzleLoading: boolean;
   isSolved: boolean;
   isLost: boolean;
   toWin: "White" | "Black";
@@ -34,4 +35,5 @@ export interface GameContextType {
     targetSquare: string,
     promotion?: string
   ) => boolean;
+  skipPuzzle?: () => void;
 }

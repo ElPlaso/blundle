@@ -1,5 +1,4 @@
-import { useCallback } from "react";
-import { useNavigate } from "react-router";
+import { useGameContext } from "../../contexts/utils";
 
 export default function RefreshButton({
   children,
@@ -8,14 +7,14 @@ export default function RefreshButton({
   children: React.ReactNode;
   className?: string;
 }) {
-  const navigate = useNavigate();
-
-  const handleRefresh = useCallback(() => {
-    navigate(0);
-  }, [navigate]);
+  const { skipPuzzle, isPuzzleLoading } = useGameContext();
 
   return (
-    <button className={className} onClick={handleRefresh}>
+    <button
+      disabled={isPuzzleLoading}
+      className={`${className} ${isPuzzleLoading && "opacity-50"}`}
+      onClick={skipPuzzle}
+    >
       {children}
     </button>
   );
