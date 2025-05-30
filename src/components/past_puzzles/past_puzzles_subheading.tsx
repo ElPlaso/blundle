@@ -7,7 +7,7 @@ export default function PastPuzzlesSubheading() {
   const { toWin, isPuzzleLoading, puzzleNumber } = useGameContext();
 
   return (
-    <div className="flex items-center justify-between w-full max-sm:flex-col">
+    <div className="flex items-center justify-between w-full max-sm:flex-col max-sm:gap-y-2">
       <div className="flex justify-start flex-1">
         <div className="font-medium text-lightAbsent">
           Puzzle #{isPuzzleLoading ? "" : puzzleNumber}
