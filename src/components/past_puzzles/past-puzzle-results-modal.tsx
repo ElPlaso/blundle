@@ -3,6 +3,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  Slide,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useGameContext } from "../../contexts/utils";
@@ -10,6 +11,17 @@ import StatsSubheading from "../stats_modal/stats-subheading";
 import NextPuzzleButton from "./next-puzzle-button";
 import { Link } from "react-router";
 import { Home, SkipNext } from "@mui/icons-material";
+import React from "react";
+import { TransitionProps } from "@mui/material/transitions";
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function PastPuzzleResultsModal() {
   const { isSolved, isLost, isPuzzleLoading } = useGameContext();
@@ -28,9 +40,26 @@ export default function PastPuzzleResultsModal() {
   }, [isSolved, isLost]);
 
   return (
-    <>
-      <Dialog open={isOpen}>
-        <DialogContent className="flex flex-col gap-y-8">
+    <Dialog
+      fullScreen={false}
+      aria-labelledby="dialog"
+      open={isOpen}
+      TransitionComponent={Transition}
+      style={{
+        color: localStorage.theme == "light" ? "white" : "#212121",
+      }}
+      className="transition-all duration-300"
+    >
+      <style>
+        {`
+            .MuiPaper-root { 
+              background-color: ${
+                localStorage.theme === "light" ? "#f0f3f3" : "#121212"
+              };
+            `}
+      </style>
+      <div className="flex flex-col items-center mb-4 max-sm:w-full md:w-96">
+        <DialogContent className="flex flex-col w-full gap-y-8">
           <DialogContentText className="flex flex-col items-center justify-center gap-y-2">
             <StatsSubheading />
           </DialogContentText>
@@ -47,7 +76,7 @@ export default function PastPuzzleResultsModal() {
             </button>
           </Link>
         </DialogActions>
-      </Dialog>
-    </>
+      </div>
+    </Dialog>
   );
 }
