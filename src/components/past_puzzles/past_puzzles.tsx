@@ -11,8 +11,8 @@ export default function PastPuzzles() {
 
   return (
     <>
-      <PastPuzzlesTopAppBar />
       <PastPuzzleProvider>
+        <PastPuzzlesTopAppBar />
         <div className="flex flex-col m-4 gap-y-2">
           {puzzleNumber}
           <PastPuzzlesSubheading />
