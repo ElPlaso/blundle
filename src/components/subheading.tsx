@@ -2,9 +2,9 @@ import { useGameContext } from "../contexts/utils";
 import { CircularProgress } from "@mui/material";
 
 export default function Subheading() {
-  const { toWin, currentPosition } = useGameContext();
+  const { toWin, isPuzzleLoading } = useGameContext();
 
-  if (!currentPosition)
+  if (isPuzzleLoading)
     return (
       <h3 className="text-lightAbsent">
         <CircularProgress color="inherit" size="24px" />

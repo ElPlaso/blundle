@@ -6,6 +6,7 @@ import Modal from "./../shared/Modal";
 import Share from "./share";
 import Stats from "./stats";
 import StatsSubheading from "./stats-subheading";
+import PastGamesLink from "./past-games-link";
 
 export default function StatsModal() {
   const { isSolved, isLost } = useGameContext();
@@ -37,8 +38,9 @@ export default function StatsModal() {
             <StatsSubheading />
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions className="flex flex-col gap-y-2">
           <Share />
+          <PastGamesLink />
         </DialogActions>
       </Modal>
     </>

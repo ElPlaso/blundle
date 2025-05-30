@@ -44,7 +44,7 @@ export default function Share() {
       <button
         onClick={handleShare}
         disabled={!isSolved && !isLost}
-        className="hover: flex w-48 justify-center gap-x-2 rounded-full py-2 text-center text-sm font-bold text-white enabled:bg-lightCorrect disabled:cursor-not-allowed disabled:bg-lightAbsent enabled:dark:bg-darkCorrect dark:disabled:bg-darkAbsent"
+        className="flex justify-center w-48 py-2 text-sm font-bold text-center text-white rounded-full gap-x-2 enabled:bg-lightCorrect disabled:cursor-not-allowed disabled:bg-lightAbsent enabled:dark:bg-darkCorrect dark:disabled:bg-darkAbsent"
       >
         Share
         <ShareOutlined />
