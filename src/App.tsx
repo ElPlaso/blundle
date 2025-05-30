@@ -7,8 +7,17 @@ import Subheading from "./components/subheading";
 import TopAppBar from "./components/top-app-bar";
 import { GameProvider } from "./contexts/game";
 import PastPuzzles from "./components/past_puzzles/past_puzzles";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    if (localStorage.theme === "dark" || !("theme" in localStorage)) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
