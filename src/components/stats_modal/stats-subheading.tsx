@@ -14,9 +14,15 @@ export default function StatsSubheading() {
       </span>
 
       {(isSolved || isLost) && (
-        <span className="text-lightAbsent">
-          Solution: {getSolution().join(" ")}
-        </span>
+        <>
+          <span className="text-lightAbsent">
+            Solution: {getSolution().join(" ")}
+          </span>
+
+          <span className="text-xs opacity-50 text-lightAbsent">
+            You can continue making/undoing moves
+          </span>
+        </>
       )}
     </>
   );

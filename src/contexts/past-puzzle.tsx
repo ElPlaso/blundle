@@ -54,11 +54,7 @@ export function PastPuzzleProvider({
     targetSquare: string,
     promotionPiece?: string
   ) {
-    if (
-      isSolved ||
-      isLost ||
-      currentGuessMoves!.findIndex((move) => move === "") === -1
-    ) {
+    if (currentGuessMoves!.findIndex((move) => move === "") === -1) {
       return false;
     }
 
@@ -133,15 +129,17 @@ export function PastPuzzleProvider({
   const makeGuessMove = (guessMove: string) => {
     const movesWithMoveAdded = addMove(currentGuessMoves, guessMove);
     if (!movesWithMoveAdded) return;
+    if (isSolved || isLost) return;
     setCurrentGuessMoves(movesWithMoveAdded);
   };
 
   const removeLastGuessMove = () => {
+    game.current.undo();
+    setCurrentPosition(game.current.fen());
+
     const movesWithLastRemoved = removeLastMove(currentGuessMoves);
     if (!movesWithLastRemoved) return;
     setCurrentGuessMoves(movesWithLastRemoved);
-    game.current.undo();
-    setCurrentPosition(game.current.fen());
   };
 
   const submitGuess = () => {

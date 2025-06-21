@@ -3,14 +3,15 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  DialogTitle,
+  IconButton,
   Slide,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useGameContext } from "../../contexts/utils";
+import { usePastPuzzlesResultsContext } from "../../contexts/utils";
 import StatsSubheading from "../stats_modal/stats-subheading";
 import NextPuzzleButton from "./next-puzzle-button";
 import { Link } from "react-router";
-import { Home, SkipNext } from "@mui/icons-material";
+import { Close, Home, SkipNext } from "@mui/icons-material";
 import React from "react";
 import { TransitionProps } from "@mui/material/transitions";
 
@@ -24,26 +25,15 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export default function PastPuzzleResultsModal() {
-  const { isSolved, isLost, isPuzzleLoading } = useGameContext();
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    if (isPuzzleLoading) {
-      setIsOpen(false);
-    }
-  }, [isPuzzleLoading]);
-
-  useEffect(() => {
-    if (isSolved || isLost) {
-      setIsOpen(true);
-    }
-  }, [isSolved, isLost]);
+  const { isModalOpen: isOpen, toggleModal: toggleOpen } =
+    usePastPuzzlesResultsContext();
 
   return (
     <Dialog
       fullScreen={false}
       aria-labelledby="dialog"
       open={isOpen}
+      onClose={toggleOpen}
       TransitionComponent={Transition}
       style={{
         color: localStorage.theme == "light" ? "white" : "#212121",
@@ -59,6 +49,16 @@ export default function PastPuzzleResultsModal() {
             `}
       </style>
       <div className="flex flex-col items-center mb-4 max-sm:w-full md:w-96">
+        <DialogTitle className="flex items-center justify-between w-full">
+          <span className="text-xl font-bold dark:text-white">Results</span>
+          <IconButton
+            onClick={toggleOpen}
+            disableRipple
+            className="focus:ring-2 focus:ring-black dark:focus:ring-white"
+          >
+            <Close className="text-black dark:text-white" />
+          </IconButton>
+        </DialogTitle>
         <DialogContent className="flex flex-col w-full gap-y-8">
           <DialogContentText className="flex flex-col items-center justify-center gap-y-2">
             <StatsSubheading />

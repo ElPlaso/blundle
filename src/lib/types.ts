@@ -37,3 +37,8 @@ export interface GameContextType {
   ) => boolean;
   skipPuzzle?: () => void;
 }
+
+export interface PastPuzzlesResultsContextType {
+  isModalOpen: boolean;
+  toggleModal: () => void;
+}
