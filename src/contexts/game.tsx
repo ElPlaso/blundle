@@ -55,11 +55,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     targetSquare: string,
     promotionPiece?: string
   ) {
-    if (
-      // isSolved ||
-      // isLost ||
-      currentGuessMoves!.findIndex((move) => move === "") === -1
-    ) {
+    if (currentGuessMoves!.findIndex((move) => move === "") === -1) {
       return false;
     }
 
