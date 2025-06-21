@@ -56,8 +56,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     promotionPiece?: string
   ) {
     if (
-      isSolved ||
-      isLost ||
+      // isSolved ||
+      // isLost ||
       currentGuessMoves!.findIndex((move) => move === "") === -1
     ) {
       return false;
@@ -210,15 +210,17 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const makeGuessMove = (guessMove: string) => {
     const movesWithMoveAdded = addMove(currentGuessMoves, guessMove);
     if (!movesWithMoveAdded) return;
+    if (isSolved || isLost) return;
     setCurrentGuessMoves(movesWithMoveAdded);
   };
 
   const removeLastGuessMove = () => {
+    game.current.undo();
+    setCurrentPosition(game.current.fen());
+
     const movesWithLastRemoved = removeLastMove(currentGuessMoves);
     if (!movesWithLastRemoved) return;
     setCurrentGuessMoves(movesWithLastRemoved);
-    game.current.undo();
-    setCurrentPosition(game.current.fen());
   };
 
   const submitGuess = () => {
