@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { GameContextType } from "../lib/types";
+import { GameContextType, PastPuzzlesResultsContextType } from "../lib/types";
 import { Chess } from "chess.js";
 
 export const intitialGameState: GameContextType = {
@@ -110,4 +110,16 @@ export function pvToSan(pv: Array<string>, fen: string) {
   }
 
   return san;
+}
+
+export const intitialPastPuzzlesResultsState: PastPuzzlesResultsContextType = {
+  isModalOpen: false,
+  toggleModal: () => {},
+};
+
+export const PastPuzzlesResultsContext =
+  createContext<PastPuzzlesResultsContextType>(intitialPastPuzzlesResultsState);
+
+export function usePastPuzzlesResultsContext() {
+  return useContext(PastPuzzlesResultsContext);
 }
