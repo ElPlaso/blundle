@@ -1,5 +1,10 @@
 import { test, describe, expect } from "vitest";
-import { addMove, compareGuessToSolution, pvToSan, removeLastMove } from "../src/contexts/utils";
+import {
+  addMove,
+  compareGuessToSolution,
+  pvToSan,
+  removeLastMove,
+} from "../src/contexts/utils";
 import { formatEmojiString } from "../src/components/stats_modal/utils";
 
 describe("Game", () => {
@@ -7,7 +12,11 @@ describe("Game", () => {
     const currentGuessMoves = ["a1", "b2", "c3", "d4"];
     const solution = ["a1", "b2", "c3", "d4"];
     const numberOfMovesPerGuess = 4;
-    const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution,
+      numberOfMovesPerGuess
+    );
     expect(result.correctMoves).toEqual([0, 1, 2, 3]);
     expect(result.incorrectButIncludedMoves).toEqual([]);
   });
@@ -16,7 +25,11 @@ describe("Game", () => {
     const currentGuessMoves = ["a2", "b3", "c4", "d5"];
     const solution = ["a1", "b2", "c3", "d4"];
     const numberOfMovesPerGuess = 4;
-    const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution,
+      numberOfMovesPerGuess
+    );
     expect(result.correctMoves).toEqual([]);
     expect(result.incorrectButIncludedMoves).toEqual([]);
   });
@@ -25,7 +38,11 @@ describe("Game", () => {
     const currentGuessMoves = ["a1", "d4", "c4", "b2"];
     const solution = ["a1", "b2", "c3", "d4"];
     const numberOfMovesPerGuess = 4;
-    const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution,
+      numberOfMovesPerGuess
+    );
     expect(result.correctMoves).toEqual([0]);
     expect(result.incorrectButIncludedMoves).toEqual([1, 3]);
   });
@@ -34,7 +51,11 @@ describe("Game", () => {
     const currentGuessMoves = ["a1", "d4", "c4", "a1"];
     const solution = ["a1", "b2", "c3", "d4"];
     const numberOfMovesPerGuess = 4;
-    const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution,
+      numberOfMovesPerGuess
+    );
     expect(result.correctMoves).toEqual([0]);
     expect(result.incorrectButIncludedMoves).toEqual([1]);
   });
@@ -43,7 +64,11 @@ describe("Game", () => {
     const currentGuessMoves = ["a1", "d4", "c4", "a1"];
     const solution = ["d4", "b2", "c3", "a1"];
     const numberOfMovesPerGuess = 4;
-    const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution,
+      numberOfMovesPerGuess
+    );
     expect(result.correctMoves).toEqual([3]);
     expect(result.incorrectButIncludedMoves).toEqual([1]);
   });
@@ -52,7 +77,11 @@ describe("Game", () => {
     const currentGuessMoves = ["b1", "a1", "c1", "a1"];
     const solution = ["a1", "b2", "c3", "d4"];
     const numberOfMovesPerGuess = 4;
-    const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution,
+      numberOfMovesPerGuess
+    );
     expect(result.correctMoves).toEqual([]);
     expect(result.incorrectButIncludedMoves).toEqual([1]);
   });
@@ -61,15 +90,36 @@ describe("Game", () => {
     const currentGuessMoves = ["a1", "d4", "c4", "a1"];
     const solution = ["a1", "b2", "c3", "a1"];
     const numberOfMovesPerGuess = 4;
-    const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution,
+      numberOfMovesPerGuess
+    );
     expect(result.correctMoves).toEqual([0, 3]);
+  });
+
+  test("Compares current guess to solution, partially correct with one correct and one partially correct duplicate move", () => {
+    const currentGuessMoves = ["a1", "a1", "c4", "d4"];
+    const solution = ["a1", "b2", "c3", "a1"];
+    const numberOfMovesPerGuess = 4;
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution,
+      numberOfMovesPerGuess
+    );
+    expect(result.correctMoves).toEqual([0]);
+    expect(result.incorrectButIncludedMoves).toEqual([1]);
   });
 
   test("Allows any checkmate as long as rest of sequence is correct", () => {
     const currentGuessMoves = ["a1", "b2", "c3", "d5#"];
     const solution = ["a1", "b2", "c3", "d4#"];
     const numberOfMovesPerGuess = 4;
-    const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution,
+      numberOfMovesPerGuess
+    );
     expect(result.correctMoves).toEqual([0, 1, 2, 3]);
     expect(result.incorrectButIncludedMoves).toEqual([]);
   });
@@ -78,7 +128,11 @@ describe("Game", () => {
     const currentGuessMoves = ["a2", "b3", "c4", "d5#"];
     const solution = ["a1", "b2", "c3", "d4#"];
     const numberOfMovesPerGuess = 4;
-    const result = compareGuessToSolution(currentGuessMoves, solution, numberOfMovesPerGuess);
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution,
+      numberOfMovesPerGuess
+    );
     expect(result.correctMoves).toEqual([]);
     expect(result.incorrectButIncludedMoves).toEqual([]);
   });
@@ -120,11 +174,11 @@ describe("Game", () => {
   });
 
   test("Converts pawn move notation from PV to SAN", () => {
-    const pv = ["a2a3"]
+    const pv = ["a2a3"];
     const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     const result = pvToSan(pv, fen);
     expect(result).toEqual(["a3"]);
-  })
+  });
 });
 
 describe("Game results", () => {
@@ -137,9 +191,11 @@ describe("Game results", () => {
       ["", "", "", ""],
       ["", "", "", ""],
       ["", "", "", ""],
-    ]
-    const guessResults = allGuesses.map(guess => compareGuessToSolution(guess, solution, 4));
+    ];
+    const guessResults = allGuesses.map((guess) =>
+      compareGuessToSolution(guess, solution, 4)
+    );
     const result = formatEmojiString(allGuesses, guessResults);
     expect(result).toEqual("⬛⬛⬛⬛\n🟩🟩🟨🟨\n🟩🟩🟩🟩\n");
   });
-})
+});
