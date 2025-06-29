@@ -211,11 +211,20 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   };
 
   const removeLastGuessMove = () => {
+    if (
+      currentGuessMoves.every((move) => move === "") &&
+      !isSolved &&
+      !isLost
+    ) {
+      return;
+    }
+
     game.current.undo();
     setCurrentPosition(game.current.fen());
 
     const movesWithLastRemoved = removeLastMove(currentGuessMoves);
     if (!movesWithLastRemoved) return;
+
     setCurrentGuessMoves(movesWithLastRemoved);
   };
 
