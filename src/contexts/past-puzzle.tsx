@@ -134,6 +134,14 @@ export function PastPuzzleProvider({
   };
 
   const removeLastGuessMove = () => {
+    if (
+      currentGuessMoves.every((move) => move === "") &&
+      !isSolved &&
+      !isLost
+    ) {
+      return;
+    }
+
     game.current.undo();
     setCurrentPosition(game.current.fen());
 
