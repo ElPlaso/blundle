@@ -111,6 +111,19 @@ describe("Game", () => {
     expect(result.incorrectButIncludedMoves).toEqual([1]);
   });
 
+  test("Compares current guess to solution, partially correct with 2 partially correct duplicate moves", () => {
+    const currentGuessMoves = ["c4", "a1", "a1", "d4"];
+    const solution = ["a1", "b2", "c3", "a1"];
+    const numberOfMovesPerGuess = 4;
+    const result = compareGuessToSolution(
+      currentGuessMoves,
+      solution,
+      numberOfMovesPerGuess
+    );
+    expect(result.correctMoves).toEqual([]);
+    expect(result.incorrectButIncludedMoves).toEqual([1, 2]);
+  });
+
   test("Allows any checkmate as long as rest of sequence is correct", () => {
     const currentGuessMoves = ["a1", "b2", "c3", "d5#"];
     const solution = ["a1", "b2", "c3", "d4#"];
