@@ -52,7 +52,7 @@ export function compareGuessToSolution(
   });
 
   currentGuessMoves.forEach((move, index) => {
-    if (remainingSolution.includes(move)) {
+    if (remainingSolution.includes(move) && !correctMoves.includes(index)) {
       incorrectButIncludedMoves.push(index);
       // remove from remaining solution
       const newIndex = remainingSolution.indexOf(move);
