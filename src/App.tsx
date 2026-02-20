@@ -28,12 +28,14 @@ function App() {
             <GameProvider>
               <TopAppBar />
               <div className="flex flex-col items-center m-4 gap-y-2">
-                <Alert severity="info">
-                  Blundle is moving to{" "}
-                  <Link href="https://www.blundle.xyz">blundle.xyz</Link>.
-                  blundle.online will no longer be valid after the 10th of March
-                  2026.
-                </Alert>
+                {window.location.hostname !== "www.blundle.xyz" && (
+                  <Alert severity="info">
+                    Blundle is moving to{" "}
+                    <Link href="https://www.blundle.xyz">blundle.xyz</Link>.
+                    blundle.online will no longer be valid after the 10th of
+                    March 2026.
+                  </Alert>
+                )}
                 <Subheading />
                 <div className="flex max-sm:flex-col max-sm:gap-y-4 lg:gap-x-4 sm:gap-x-2">
                   <div className="flex lg:w-[504px] md:w-[300px] max-sm:w-[250px] flex-col items-center">
