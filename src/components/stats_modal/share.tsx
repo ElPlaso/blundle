@@ -32,7 +32,7 @@ export default function Share() {
 
     shareString += `${emojiString}`;
 
-    shareString += "#blundle https://blundle.online";
+    shareString += "#blundle https://blundle.xyz";
 
     navigator.clipboard.writeText(shareString);
 
